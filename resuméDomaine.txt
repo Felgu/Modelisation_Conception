@@ -1,0 +1,20 @@
+
+-compagnie veut:controle de calcul de temps,salaire
+-timelog(
+--employe*(taux horaire de base,taux temps sup,id,nom,date d'embauche,date depart,nas,poste
+--une activité(debut activité,nom de projet,discipline de travail,arret d'activité,date,heure debut,heure fin,
+--discipline(nom
+-interface(cmd)*
+--utilisateur(employé  et admin)va etre la classe parent
+
+--un rapport:
+  (-etat du projet:nombre d'heures,% avancement
+   -global,
+   -des valeurs,:taux brut,tauxDeduction
+   -talon de paie,
+--projet(nom,date debut,date fin,nbr d<heures bufdgete,nom et id
+
+**les -- sont a considéré dns le modele du domaine**
+
+les Associations
+
