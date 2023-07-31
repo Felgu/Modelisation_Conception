@@ -3,15 +3,28 @@ package _TimeLogV01;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
+import model.Discipline;
+import model.enums.DisciplineTypes;
+import service.InitTimeLog;
+import service.ResourceService;
 
 public class Main {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		
+		InitTimeLog initTimeLog = new InitTimeLog();
+		
 		Main.menuInitiation();	
 	}
 	
+	// Avant la connection 
 	public static void menuInitiation() {
+		
+		
+		
 		
 	     System.out.println("Bienvenu sur TimeLog");
 	     
