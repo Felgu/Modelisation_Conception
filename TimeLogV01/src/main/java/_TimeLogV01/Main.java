@@ -20,7 +20,7 @@ public class Main {
 		
 		AuthService authService = new AuthService();
 		
-	     System.out.println("Bienvenu sur TimeLog");
+	     System.out.println("Bienvenue sur TimeLog");
 	     
 	        System.out.println("1. Employe");
 	        System.out.println("2. Administrateur");	        
@@ -31,18 +31,19 @@ public class Main {
 	        	int nbrChosi = Integer.parseInt(inputOutput ("Veuillez appuyer sur le numéro qui correspond pour vous connectez."));
 	        	
 	        	switch (nbrChosi) {
-				case 1: 
-					
-					authService.seConnecter(false); break;
+	        	
+				case 1: authService.seConnecter(false); break;
 				
-				case 2 : authService.seConnecter(true);
+				case 2 : authService.seConnecter(true); break;
+				
+				case 0 : System.out.println("Au revoir"); break;
 				
 				default: System.out.println("veuillez entrer un nombre indiqué");
 				
 	        	}
 	        	 
 	        } catch (NumberFormatException e) {
-	        	System.out.println("veuillez entrer un numéro de 0 - 6");
+	        	System.out.println("veuillez entrer");
 	        	menuInitiation();
 	        }
 	}  

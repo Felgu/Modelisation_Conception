@@ -33,10 +33,14 @@ public class AuthService {
 	private void admin() {
 		
 		System.out.println("-- Connexion Admin --");
-		String id= recupererLesEntree("Entrée votre nom d'usager");
-		String nomUsage= recupererLesEntree("Entrée votre mot de passe");
+		String nomUsager= recupererLesEntree("Entrée votre nom d'usager");
+		String motDePasse= recupererLesEntree("Entrée votre mot de passe");
 		
-		System.out.println("La suite Arrive");
+		System.out.println("Supponsons que c'est vrai");
+		
+		AdminService adminService = new AdminService();
+		adminService.menu();
+		
 	}
 	
 	 /**
