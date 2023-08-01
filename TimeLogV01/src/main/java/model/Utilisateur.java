@@ -14,13 +14,11 @@ public class Utilisateur {
 	
 
 	
-	private static int lastUtilisateurId = 0;
+	
 	
 	public Utilisateur(String nom) {
 		super();
-		this.nom = nom;
-		this.id = ++lastUtilisateurId;
-		this.nomUtilisateur = nom+id;
+		this.nom = nom; 
 	}
 
 	public Utilisateur() {

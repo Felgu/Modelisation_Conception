@@ -2,20 +2,14 @@ package _TimeLogV01;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-
-import model.Discipline;
-import model.enums.DisciplineTypes;
-import service.InitTimeLog;
-import service.ResourceService;
+import java.io.InputStreamReader; 
+import service.InitTimeLogService; 
 
 public class Main {
 
 	public static void main(String[] args) {
 		
-		InitTimeLog initTimeLog = new InitTimeLog();
+		InitTimeLogService initTimeLog = new InitTimeLogService();
 		
 		Main.menuInitiation();	
 	}

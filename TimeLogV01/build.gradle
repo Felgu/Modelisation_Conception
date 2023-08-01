@@ -27,7 +27,7 @@ dependencies {
     implementation 'com.google.guava:guava:31.1-jre'
     
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.5'  // Pour persister les donnees 
-    
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.12.4' // persister les dates
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

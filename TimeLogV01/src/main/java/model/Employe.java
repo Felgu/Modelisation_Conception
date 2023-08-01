@@ -3,32 +3,50 @@
  */
 package model;
 
-import java.util.Date;
-
-import javax.swing.text.DateFormatter;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  * 
  */
-public class Employe extends Utilisateur{ 
-	
+public class Employe extends Utilisateur {
+
 	private String poste;
-	private Date dateDepart;
-	private Date dateEmbauche;
+	private String dateDepart;
+	private String dateEmbauche;
 	private int npe = 2; // nombre de projet par employe par defaut
 	private String nas; // numero d'assurance sociale
-	private int idTauxHoraire; 
+	private int idTauxHoraire;
+	
+	private static int lastEmployeId = 0;
 
 	public Employe(String nom) {
-		super(nom); 
-		//dateEmbauche = new DateFormatter("dd/mm/yyyy");
+		super(nom);
+		this.dateEmbauche = getDate();
+		this.id = ++lastEmployeId;
+		this.nomUtilisateur = nom+this.id;
 	}
 
-	public Date getDateEmbauche() {
+	public String getDate() {
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate localDate = LocalDate.now();
+		return localDate.format(formatter);
+	}
+
+	public String getDateDepart() {
+		return dateDepart;
+	}
+
+	public void setDateDepart(String dateDepart) {
+		this.dateDepart = dateDepart;
+	}
+
+	public String getDateEmbauche() {
 		return dateEmbauche;
 	}
 
-	public void setDateEmbauche(Date dateEmbauche) {
+	public void setDateEmbauche(String dateEmbauche) {
 		this.dateEmbauche = dateEmbauche;
 	}
 
@@ -46,14 +64,6 @@ public class Employe extends Utilisateur{
 
 	public void setPoste(String poste) {
 		this.poste = poste;
-	}
-
-	public Date getDateDepart() {
-		return dateDepart;
-	}
-
-	public void setDateDepart(Date dateDepart) {
-		this.dateDepart = dateDepart;
 	}
 
 	public int getNpe() {
@@ -79,9 +89,5 @@ public class Employe extends Utilisateur{
 	public void setIdTauxHoraire(int idTauxHoraire) {
 		this.idTauxHoraire = idTauxHoraire;
 	}
- 
-	
- 
-	
 
 }
