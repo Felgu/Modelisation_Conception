@@ -12,16 +12,19 @@ public class DetailProjetDiscipline {
 	private int idProjet;
 	private int idDiscpline;
 	private String etat; // etat d'avancement
-	private double budget; // montant prevu pour une discpline dans un projet
+	private double budget; // montant prevu pour une discpline dans un projet	
+ 
+	private static int lastDetaild = 0;
 	
-	
-	
-	
-	public DetailProjetDiscipline(int idProjet, int idDiscpline) { 
+	public DetailProjetDiscipline(int idProjet, int idDiscpline, double budget) { 
 		this.idProjet = idProjet;
 		this.idDiscpline = idDiscpline;
+		this.budget = budget;
+		this.idDetailProjetDiscipline= ++lastDetaild;
 	}
-	
+
+
+
 	public int getIdDetailProjetDiscipline() {
 		return idDetailProjetDiscipline;
 	}
