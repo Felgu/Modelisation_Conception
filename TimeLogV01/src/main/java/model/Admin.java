@@ -9,6 +9,9 @@ public class Admin extends Utilisateur {
 		super(nom);
 		
 	}
+	
+	public Admin() {}
+
 
 	public String getMotDePasse() {
 		return motDePasse;

@@ -22,12 +22,19 @@ public class Employe extends Utilisateur {
 
 	public Employe(String nom) {
 		super(nom);
-		this.dateEmbauche = getDate();
+		this.dateEmbauche = formatDate();
 		this.id = ++lastEmployeId;
 		this.nomUtilisateur = nom+this.id;
 	}
+	
+	
 
-	public String getDate() {
+	public Employe() { 
+	}
+
+
+
+	public String formatDate() {
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate localDate = LocalDate.now();
