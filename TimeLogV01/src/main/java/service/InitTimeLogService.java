@@ -5,7 +5,6 @@ package service;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import model.Admin;
@@ -20,13 +19,11 @@ import model.DetailProjetDiscipline;
  */
 public class InitTimeLogService extends ResourceService {
 
-	public InitTimeLogService() {
-		super();
+	public InitTimeLogService() throws IOException {
 		saveAdmin();
 		saveProject();
 		saveEmploye();
 		saveDiscipline(); 
-		//saveDetailProjetDiscipline(); 
 	}
 
 	// 3 project lors du demarage de systeme
@@ -67,7 +64,7 @@ public class InitTimeLogService extends ResourceService {
 		admin.add(new Admin("admin"));
 
 		try {
-			this.save(admin, "admin");
+			this.save(admin, "admins");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -91,24 +88,8 @@ public class InitTimeLogService extends ResourceService {
 		}
 	}
 
-	public void saveDetailProjetDiscipline()  {
-
-		try {
-			List<Projet> projets =  ((List<Projet>) this.chargerDesDonnées("projets"));
-			List<Discipline> disciplines = (List<Discipline>) this.chargerDesDonnées("disciplines");
-			
-			List<DetailProjetDiscipline> detailProjetDisciplines = new ArrayList<>();
-			
-			for (Projet projet : projets) {
-				for (Discipline discipline : disciplines) {
-					detailProjetDisciplines.add(new model.DetailProjetDiscipline(projet.getIdProjet(),discipline.getIdDiscipline()));
-				}
-			} 
-			
-			this.save(detailProjetDisciplines, "detailProjetDisciplines");	
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+	 
+	 public void saveDetailProjetDiscipline() {
+		 
+	 }
 }
