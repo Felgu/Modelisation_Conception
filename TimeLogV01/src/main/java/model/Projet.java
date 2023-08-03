@@ -1,6 +1,9 @@
 package model;
 
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
  
 public class Projet {
 	
@@ -16,7 +19,17 @@ public class Projet {
 		this.nomProjet = nomProjet;
 		this.idProjet = ++lastProjectId;
 		statut="Début";
+	} 
+	 
+	public Projet() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
+
+
+
+
+
 
 	public int getIdProjet() {
 		return idProjet;

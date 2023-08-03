@@ -3,12 +3,18 @@ package model;
 
 public class Discipline {
 	
-	 private static int lastDisciplineId = 0;
+	private static int lastDisciplineId = 0;
 
 	private int idDiscipline;
 	private String nom;
 	
 	
+	
+	public Discipline() {
+		super();
+	}
+
+
 	public Discipline(String nom) { 
 		this.nom = nom;
 		this.idDiscipline=++lastDisciplineId;

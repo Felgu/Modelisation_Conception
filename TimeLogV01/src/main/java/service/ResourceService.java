@@ -4,14 +4,15 @@
 package service;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.IOException; 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference; 
+import com.fasterxml.jackson.databind.ObjectMapper; 
+
+import model.Projet;
 
 /**
  * Classe pour gérer la persistance(sauvegarde) JSON 
@@ -29,23 +30,26 @@ public class ResourceService {
 		fichierDB = new File(fileName);
 		mappingObjet = new ObjectMapper();
 		this.tables = new HashMap<>();
+
 	}
 
 	// sauvegarder les données
 	public void save(List<?> objects, String tableName) throws IOException {
 		tables.put(tableName, objects);
 		mappingObjet.writeValue(fichierDB, tables);
-	};
-
-	// Cette fonction permet de recuperer nos données en spécifiant la table
-	// Ex table : discpline,employe ...
-	public List<?> chargerDesDonnées(String nomTable) throws IOException {
-
-		if (tables.containsKey(nomTable)) {
-			InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fichierDB.getName());
-			return mappingObjet.readValue(inputStream, new TypeReference<Map<String, List<?>>>() {}).get(nomTable);
-		}
-		return null;
 	}
+
+	// Load the data from the JSON file
+	// charger les données des projets à partir du fichier JSON
+    public  List<?> lireLesDonnees(String nomTable,Class<?> clazz) throws IOException {
+    	
+    	 Map<String, List<?>> chargerLesDonees = mappingObjet.readValue(fichierDB, new TypeReference<Map<String, List<?>>>() {});
+         List<?> donnees = chargerLesDonees.get(nomTable);
+
+         // Convertir la liste des objets LinkedHashMap en liste des objets passer en parametre
+         List<?> listDonnee = mappingObjet.convertValue(donnees,mappingObjet.getTypeFactory().constructCollectionType(List.class, clazz));
+         
+         return listDonnee;
+    }
 
 }

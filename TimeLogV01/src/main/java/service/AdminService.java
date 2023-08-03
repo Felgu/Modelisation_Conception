@@ -8,9 +8,15 @@ import _TimeLogV01.Main;
 
 public class AdminService {
 
-	
-	public void menu() {
+	public AdminService() {}
+
+	//Pour la première connexion
+	public void menu(String nomPersonne) throws IOException {
+		System.out.println("Bienvenue " + nomPersonne.toUpperCase()+"\n");
 		
+		this.menu();
+	} 
+	public void menu() throws IOException { 
 		System.out.println("-- Menu Admin--");
 		System.out.println("1. Créer un projet");
 		System.out.println("2. Supprimer un projet");
@@ -20,47 +26,47 @@ public class AdminService {
 		System.out.println("6. Supprimer un employé");
 		System.out.println("7. Changer le NPE d'un employé");
 		System.out.println("8. Modifier le nom d'un utilisateur");
-		System.out.println("9. Modifier le ID"); 
-		System.out.println("0. Deconnecter"); 
-		
+		System.out.println("9. Modifier le ID");
+		System.out.println("0. Deconnecter");
+		System.out.println();
+
 		try {
-			
+
 			int nbrChosi = Integer.parseInt(recupererLesEntree("Veuillez appuyer sur le numéro qui correspond au menu."));
-        	
-			switch (nbrChosi) {        	
-			 
-			case 0 : this.deconnecter();
+
+			switch (nbrChosi) {
+
+			case 0: this.deconnecter(); break;
+
+			default:
+				System.out.println("Veuillez entrer un nombre indiqué au menu\n");
+
+			}
+
+		} catch (NumberFormatException e) {
+			System.out.println("Veuillez entrer un nombre indiqué au menu\n");
 			
-			default: System.out.println("veuillez entrer un nombre indiqué");
-			
-        	}
-			
-		} catch (Exception e) {
-			// TODO: handle exception
+			menu();
 		}
 	}
-	
-	private void deconnecter() {
+
+	private void deconnecter() throws IOException {
 		Main.main(null);
 	}
-	
-	 /**
-	  * 
-    */
-   private static String recupererLesEntree(String message) {
-       System.out.println(message);
-	    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-	    String returnString = "";
-	    try {
-	        returnString = br.readLine();
-	    }
-	    catch (IOException e){
-	        System.out.println("Erreur lors de la lecture de la valeur"); 
-	    }
-	    return returnString;
-   }
 
-	
-	
-	
+	/**
+	 * 
+	*/
+	private static String recupererLesEntree(String message) {
+		System.out.println(message);
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		String returnString = "";
+		try {
+			returnString = br.readLine();
+		} catch (IOException e) {
+			System.out.println("Erreur lors de la lecture de la valeur");
+		}
+		return returnString;
+	}
+
 }

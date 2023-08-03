@@ -9,14 +9,19 @@ import service.InitTimeLogService;
 
 public class Main {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		
-		InitTimeLogService initTimeLog = new InitTimeLogService();		
+		try {
+			 new InitTimeLogService();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
 		Main.menuInitiation();	
 	}
 	
 	// Avant la connection 
-	public static void menuInitiation() {
+	public static void menuInitiation() throws IOException {
 		
 		AuthService authService = new AuthService();
 		
@@ -38,12 +43,12 @@ public class Main {
 				
 				case 0 : System.out.println("Au revoir"); break;
 				
-				default: System.out.println("veuillez entrer un nombre indiqué");
+				default: System.out.println("veuillez entrer un nombre indiqué au menu"); menuInitiation();
 				
 	        	}
 	        	 
 	        } catch (NumberFormatException e) {
-	        	System.out.println("veuillez entrer");
+	        	System.out.println("Erreur d'entrée veuillez entrer un nombre indiqué au menu");
 	        	menuInitiation();
 	        }
 	}  
