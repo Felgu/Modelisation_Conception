@@ -5,12 +5,14 @@ package service;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.io.Files;
 
 import model.Projet;
 
@@ -31,7 +33,7 @@ public class ResourceService {
 		mappingObjet = new ObjectMapper();
 		this.tables = new HashMap<>();
 
-	}
+	} 
 
 	// sauvegarder les données
 	public void save(List<?> objects, String tableName) throws IOException {
@@ -48,10 +50,8 @@ public class ResourceService {
 				});
 		List<?> donnees = chargerLesDonees.get(nomTable);
 
-		// Convertir la liste des objets LinkedHashMap en liste des objets passer en
-		// parametre
-		List<?> listDonnee = mappingObjet.convertValue(donnees,
-				mappingObjet.getTypeFactory().constructCollectionType(List.class, clazz));
+		// Convertir la liste des objets LinkedHashMap en liste des objets passer en parametre
+		List<?> listDonnee = mappingObjet.convertValue(donnees,mappingObjet.getTypeFactory().constructCollectionType(List.class, clazz));
 
 		return listDonnee;
 	}

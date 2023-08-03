@@ -135,7 +135,7 @@ public class AdminService {
 				listAdmin.set(listAdmin.indexOf(admin), admin); 
 				
 				if(this.resourceService.modifierDonnee("admins", listAdmin)) {
-					System.out.println("** Nom d'usage modifié avec succes **");
+					System.out.println("** Nom d'usage modifié avec succes **\n");
 					this.menu();
 				}				
 				return true;
