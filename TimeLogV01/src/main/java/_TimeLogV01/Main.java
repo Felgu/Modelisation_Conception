@@ -43,12 +43,12 @@ public class Main {
 				
 				case 0 : System.out.println("Au revoir"); break;
 				
-				default: System.out.println("veuillez entrer un nombre indiqué");
+				default: System.out.println("veuillez entrer un nombre indiqué au menu"); menuInitiation();
 				
 	        	}
 	        	 
 	        } catch (NumberFormatException e) {
-	        	System.out.println("veuillez entrer");
+	        	System.out.println("Erreur d'entrée veuillez entrer un nombre indiqué au menu");
 	        	menuInitiation();
 	        }
 	}  
