@@ -61,7 +61,35 @@ public class AdminService {
 			menu();
 		}
 	}
-
+	private void creerProjet() throws IOException {
+		
+		}
+	private void supprimerProjet() throws IOException {
+		
+		}
+	private void ajouterEmploye() throws IOException {
+		
+		}
+	private void assignerProjet() throws IOException {
+		
+		}
+	private void ajouterDisciplineProjet() throws IOException {
+		
+		}
+	private void supprimerEmploye() throws IOException {
+		
+		
+		}
+	private void modifierNPE() throws IOException {
+		
+		}
+	private void modifierNomUsager() throws IOException {
+		
+		}
+	
+	private void modifierID() throws IOException {
+		
+	}
 	private void deconnecter() throws IOException {
 		Main.main(null);
 	}
