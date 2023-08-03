@@ -20,6 +20,14 @@ public class Admin extends Utilisateur {
 	public void setMotDePasse(String motDePasse) {
 		this.motDePasse = motDePasse;
 	}
+
+	@Override
+	public void setNomUtilisateur(String nomUtilisateur) {
+		// TODO Auto-generated method stub
+		super.setNomUtilisateur(nomUtilisateur);
+	}
+	
+	
 	
 	
 }

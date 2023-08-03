@@ -3,20 +3,28 @@ package service;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
 import _TimeLogV01.Main;
+import model.Admin;
 
 public class AdminService {
 
-	public AdminService() {}
+	private ResourceService resourceService;
 
-	//Pour la première connexion
+	public AdminService() {
+
+		this.resourceService = new ResourceService();
+	}
+
+	// Pour la première connexion
 	public void menu(String nomPersonne) throws IOException {
-		System.out.println("Bienvenue " + nomPersonne.toUpperCase()+"\n");
-		
+		System.out.println("Bienvenue " + nomPersonne.toUpperCase() + "\n");
+
 		this.menu();
-	} 
-	public void menu() throws IOException { 
+	}
+
+	public void menu() throws IOException {
 		System.out.println("-- Menu Admin--");
 		System.out.println("1. Créer un projet");
 		System.out.println("2. Supprimer un projet");
@@ -32,11 +40,15 @@ public class AdminService {
 
 		try {
 
-			int nbrChosi = Integer.parseInt(recupererLesEntree("Veuillez appuyer sur le numéro qui correspond au menu."));
+			int nbrChosi = Integer
+					.parseInt(recupererLesEntree("Veuillez appuyer sur le numéro qui correspond au menu."));
 
 			switch (nbrChosi) {
 
-			case 0: this.deconnecter(); break;
+			case 0:
+				this.deconnecter();
+				break;
+			case 8 : this.modifierNomUsagerAdmin(); break;	
 
 			default:
 				System.out.println("Veuillez entrer un nombre indiqué au menu\n");
@@ -45,7 +57,7 @@ public class AdminService {
 
 		} catch (NumberFormatException e) {
 			System.out.println("Veuillez entrer un nombre indiqué au menu\n");
-			
+
 			menu();
 		}
 	}
@@ -67,6 +79,48 @@ public class AdminService {
 			System.out.println("Erreur lors de la lecture de la valeur");
 		}
 		return returnString;
+	}
+
+	public boolean modifierNomUsagerAdmin() throws IOException {
+
+		List<Admin> listAdmin = (List<Admin>) this.resourceService.lireLesDonnees("admins", Admin.class);
+		String nouvelNomUsage = null;
+
+		String actuelNomUsage = recupererLesEntree("Entree le nom d'usage actuel :");
+
+		for (Admin admin : listAdmin) {	 
+			//test si ce nom existe
+			if (admin.getNomUtilisateur().equals(actuelNomUsage)) {
+				nouvelNomUsage = recupererLesEntree("Entree le nouveau d'usage :");				
+				if (nouvelNomUsage.length() != 0) {					
+					// Verifier si ce nom d'ulisateur existe deja
+					for (Admin checkAdmin : listAdmin) {
+						if (admin.getNomUtilisateur().equals(nouvelNomUsage)) {
+							System.out.println("Ce nom d'utilsateur existe deja\n");
+							this.menu();
+							return false;
+						}
+					}
+					//modifier le nom
+					admin.setNomUtilisateur(nouvelNomUsage); 				
+				}
+				listAdmin.set(listAdmin.indexOf(admin), admin); 
+				
+				if(this.resourceService.modifierDonnee("admins", listAdmin)) {
+					System.out.println("** Nom d'usage modifié avec succes **");
+					this.menu();
+				}				
+				return true;
+			}else {
+				System.out.println("*** Nom d'usage inconnu ***");
+				this.menu();
+				return false;
+			}
+		}
+ 
+		
+		
+		return true;
 	}
 
 }
