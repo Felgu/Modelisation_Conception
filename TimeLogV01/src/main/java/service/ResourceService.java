@@ -22,7 +22,7 @@ public class ResourceService {
 	private File fichierDB; // fichier base de la donnee
 	private Map<String, List<?>> tables;
 
-	private String fileName = "src/main/resources/dataBase.json";
+	private String fileName = "dataBase.json";
 
 	public ResourceService() {
 
