@@ -7,6 +7,7 @@ import java.util.List;
 
 import _TimeLogV01.Main;
 import model.Admin;
+import model.Employe;
 
 public class AdminService {
 
@@ -47,6 +48,9 @@ public class AdminService {
 
 			case 0:
 				this.deconnecter();
+				break;
+			case 7:
+				this.changerNpeEmploye();
 				break;
 			case 8:
 				this.modifierNomUsagerAdmin();
@@ -123,7 +127,7 @@ public class AdminService {
 		return returnString;
 	}
 
-	//Q11 nom usager
+	// Q11 nom usager
 	public boolean modifierNomUsagerAdmin() throws IOException {
 
 		List<Admin> listAdmin = (List<Admin>) this.resourceService.lireLesDonnees("admins", Admin.class);
@@ -164,7 +168,7 @@ public class AdminService {
 		return true;
 	}
 
-	//Q11 modifier ID
+	// Q11 modifier ID
 	public boolean modifierIdAdmin() throws IOException {
 
 		List<Admin> listAdmin = (List<Admin>) this.resourceService.lireLesDonnees("admins", Admin.class);
@@ -182,7 +186,7 @@ public class AdminService {
 				estNombre = false;
 			}
 		}
-		estNombre=false;
+		estNombre = false;
 		for (Admin admin : listAdmin) {
 			// test si le id existe
 			if (admin.getId() == actuelId) {
@@ -195,7 +199,7 @@ public class AdminService {
 						estNombre = false;
 					}
 				}
-				
+
 				// Verifier si ce nom l'id existe deja
 				for (Admin checkAdmin : listAdmin) {
 					if (admin.getId() == nouvelId) {
@@ -205,7 +209,7 @@ public class AdminService {
 					}
 				}
 				// modifier l'id
-				admin.setId(nouvelId); 
+				admin.setId(nouvelId);
 				listAdmin.set(listAdmin.indexOf(admin), admin);
 
 				if (this.resourceService.modifierDonnee("admins", listAdmin)) {
@@ -220,6 +224,54 @@ public class AdminService {
 			}
 		}
 
+		return true;
+	}
+
+	// Q6 modifier le NPE
+	public boolean changerNpeEmploye() throws IOException {
+
+		List<Employe> employes = (List<Employe>) this.resourceService.lireLesDonnees("employes", Employe.class);
+
+		boolean estNombre = false;
+		int nouvauNPe = 0;
+		int idEmploye = 0;
+
+		while (!estNombre) {
+			try {
+				idEmploye = Integer.parseInt(recupererLesEntree("Entree l'ID de l'employé :"));
+				estNombre = true;
+			} catch (NumberFormatException e) {
+				System.out.println("** Veuillez entrer un nombre entier **");
+				estNombre = false;
+			}
+		}
+		estNombre = false;
+		for (Employe employe : employes) {
+			// test si le id existe
+			if (employe.getId() == idEmploye) {
+				while (!estNombre) {
+					try {
+						nouvauNPe = Integer.parseInt(recupererLesEntree("Entree le nouveau NPE :"));
+						estNombre = true;
+					} catch (NumberFormatException e) {
+						System.out.println("**Veuillez entrer un entier **");
+						estNombre = false;
+					}
+				}
+
+				// modifier l'id
+				employe.setNpe(nouvauNPe);
+				employes.set(employes.indexOf(employe), employe);
+
+				if (this.resourceService.modifierDonnee("employes", employes)) {
+					System.out.println("** Le Npe de " + employe.getNom() + " est modifié avec succes **\n");
+					this.menu();
+					return true;
+				}
+			}
+		}
+		System.out.println("*** L'id entré n'existe pas **\n");
+		this.menu();
 		return true;
 	}
 
