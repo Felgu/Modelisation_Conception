@@ -7,6 +7,7 @@ import java.util.List;
 
 import _TimeLogV01.Main;
 import model.Admin;
+import model.Discipline;
 import model.Employe;
 
 public class AdminService {
@@ -49,6 +50,12 @@ public class AdminService {
 			case 0:
 				this.deconnecter();
 				break;
+			case 5:
+				this.ajouterDisciplineProjet();
+				break;	
+			case 6:
+				this.supprimerEmploye();
+				break;	
 			case 7:
 				this.changerNpeEmploye();
 				break;
@@ -89,24 +96,50 @@ public class AdminService {
 	}
 
 	private void ajouterDisciplineProjet() throws IOException {
-
+		
+		List<Discipline> disciplines = (List<Discipline>) this.resourceService.lireLesDonnees("disciplines", Discipline.class);
+		
+		String nomDisciple = recupererLesEntree("Entree le nom de la discipline :");
+		
+		disciplines.add(new Discipline(nomDisciple.toUpperCase()));
+		
+		this.resourceService.modifierDonnee("disciplines", disciplines);
+		System.out.println("** La discipline " + nomDisciple.toUpperCase() + " est ajoutée avec succès **\n");
+		menu();
+		
 	}
 
-	private void supprimerEmploye() throws IOException {
+	private boolean supprimerEmploye() throws IOException {
+		
+		List<Employe> employes = (List<Employe>) this.resourceService.lireLesDonnees("employes", Employe.class);
+		
+		boolean estNombre = false;
+		int idEmploye = 0;
 
+		while (!estNombre) {
+			try {
+				idEmploye = Integer.parseInt(recupererLesEntree("Entree l'ID de l'employé :"));
+				estNombre = true;
+			} catch (NumberFormatException e) {
+				System.out.println("** Veuillez entrer un entier **");
+				estNombre = false;
+			}
+		}
+		for (Employe employe : employes) {
+			if (employe.getId() == idEmploye) {
+				employes.remove(employe);
+				this.resourceService.modifierDonnee("employes", employes);
+				System.out.println("** L'employé " + employe.getNom() + " est supprimer avec succes **\n");
+				menu();
+				return true;
+			}
+		}
+		
+		System.out.println("** Cet Id employé n'existe pas **\n");
+		this.menu();
+		return false;
 	}
 
-	private void modifierNPE() throws IOException {
-
-	}
-
-	private void modifierNomUsager() throws IOException {
-
-	}
-
-	private void modifierID() throws IOException {
-
-	}
 
 	private void deconnecter() throws IOException {
 		Main.main(null);
