@@ -21,16 +21,9 @@ public class Projet {
 		statut="Début";
 	} 
 	 
-	public Projet() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+	public Projet() {}
 
-
-
-
-
-
+ 
 	public int getIdProjet() {
 		return idProjet;
 	}

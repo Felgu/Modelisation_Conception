@@ -5,12 +5,14 @@ package service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
 import model.Admin;
 import model.Discipline;
 import model.Employe;
+import model.EmployeProjet;
 import model.Projet;
 import model.enums.DisciplineTypes;
 import model.DetailProjetDiscipline;
@@ -26,6 +28,7 @@ public class InitTimeLogService extends ResourceService {
 		saveEmploye();
 		saveDiscipline(); 
 		saveDetailProjetDiscipline();
+		saveEmployeProjet();
 	}
 
 	// 3 project lors du demarage de systeme
@@ -107,5 +110,24 @@ public class InitTimeLogService extends ResourceService {
 		}
 		 
 		 this.saveInit(detailProjetDisciplines, "detailProjetDisciplines");
+	 }
+	 
+	 //assigner l'employé au projet
+	 public void saveEmployeProjet() throws IOException {
+		 
+		 List<Employe> employes = (List<Employe>) this.lireLesDonnees("employes", Employe.class);
+		 List<Projet> projets = (List<Projet>) this.lireLesDonnees("projets", Projet.class);
+		 
+		 List<EmployeProjet> employeProjets = new ArrayList<>();  
+		 int i =0;
+		 Random random = new Random();
+		 for (Employe employe : employes) { 
+			 i=0;
+			 while (i<2) {
+				 employeProjets.add(new EmployeProjet(employe.getId(), random.nextInt(3) + 1));
+				 i++;
+			} 
+		}		 
+		 this.saveInit(employeProjets, "employeProjets");
 	 }
 }
