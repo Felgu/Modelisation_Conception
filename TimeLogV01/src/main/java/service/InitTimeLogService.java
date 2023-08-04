@@ -37,7 +37,7 @@ public class InitTimeLogService extends ResourceService {
 		projets.add(new Projet("Projet3"));
 
 		try {
-			this.save(projets, "projets");
+			this.saveInit(projets, "projets");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -52,7 +52,7 @@ public class InitTimeLogService extends ResourceService {
 		employes.add(new Employe("Madona"));
 
 		try {
-			this.save(employes, "employes");
+			this.saveInit(employes,"employes");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -66,7 +66,7 @@ public class InitTimeLogService extends ResourceService {
 		admin.add(new Admin("admin"));
 
 		try {
-			this.save(admin, "admins");
+			this.saveInit(admin, "admins");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -83,7 +83,7 @@ public class InitTimeLogService extends ResourceService {
 		}
 
 		try {
-			this.save(disciplines, "disciplines");
+			this.saveInit(disciplines, "disciplines");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -106,6 +106,6 @@ public class InitTimeLogService extends ResourceService {
 			}
 		}
 		 
-		 this.save(detailProjetDisciplines, "detailProjetDisciplines");
+		 this.saveInit(detailProjetDisciplines, "detailProjetDisciplines");
 	 }
 }

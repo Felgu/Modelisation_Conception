@@ -26,6 +26,13 @@ public class Admin extends Utilisateur {
 		// TODO Auto-generated method stub
 		super.setNomUtilisateur(nomUtilisateur);
 	}
+
+	@Override
+	public void setId(int id) {
+		// TODO Auto-generated method stub
+		super.setId(id);
+	}
+	
 	
 	
 	

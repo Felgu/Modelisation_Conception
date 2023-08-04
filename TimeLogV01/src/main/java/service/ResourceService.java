@@ -25,7 +25,7 @@ public class ResourceService {
 	private File fichierDB; // fichier base de la donnee
 	private Map<String, List<?>> tables;
 
-	private String fileName = "dataBase.json";
+	private String fileName = "src/main/resources/dataBase.json";
 
 	public ResourceService() {
 
@@ -33,21 +33,19 @@ public class ResourceService {
 		mappingObjet = new ObjectMapper();
 		this.tables = new HashMap<>();
 
-	} 
-
-	// sauvegarder les données
-	public void save(List<?> objects, String tableName) throws IOException {
-		tables.put(tableName, objects);
-		mappingObjet.writeValue(fichierDB, tables);
 	}
 
-	// Load the data from the JSON file
+	// sauvegarder les données à initiation
+	public void saveInit(List<?> objects, String tableName) throws IOException {  
+			
+			tables.put(tableName, objects);
+			mappingObjet.writeValue(fichierDB, tables);  
+	}
+ 
 	// charger les données des projets à partir du fichier JSON
 	public List<?> lireLesDonnees(String nomTable, Class<?> clazz) throws IOException {
 
-		Map<String, List<?>> chargerLesDonees = mappingObjet.readValue(fichierDB,
-				new TypeReference<Map<String, List<?>>>() {
-				});
+		Map<String, List<?>> chargerLesDonees = mappingObjet.readValue(fichierDB,new TypeReference<Map<String, List<?>>>() {});
 		List<?> donnees = chargerLesDonees.get(nomTable);
 
 		// Convertir la liste des objets LinkedHashMap en liste des objets passer en parametre
@@ -56,19 +54,19 @@ public class ResourceService {
 		return listDonnee;
 	}
 
-	public boolean modifierDonnee(String nomTable,List<?> nouvellesDonnees) throws IOException {
-		
-		if (nouvellesDonnees == null) {
-			throw new IllegalArgumentException("Une erreur s'est produite"); 
-		}
-		
-		 this.tables.put(nomTable, nouvellesDonnees);
-		 mappingObjet.writeValue(fichierDB, tables);
-		 
-		 return true;
+	public boolean modifierDonnee(String nomTable, List<?> nouvellesDonnees) throws IOException {
 
+		Map<String, List<?>> existingTables = mappingObjet.readValue(fichierDB,	new TypeReference<Map<String, List<?>>>() {	});
+
+		if (nouvellesDonnees == null) {
+			throw new IllegalArgumentException("Une erreur s'est produite");
+		}
+
+		existingTables.put(nomTable, nouvellesDonnees);
+		mappingObjet.writeValue(fichierDB, existingTables);
+
+		tables = existingTables;
+		return true;
 	}
-	
-	 
 
 }

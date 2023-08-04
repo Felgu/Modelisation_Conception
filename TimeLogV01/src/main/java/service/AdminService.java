@@ -48,10 +48,16 @@ public class AdminService {
 			case 0:
 				this.deconnecter();
 				break;
-			case 8 : this.modifierNomUsagerAdmin(); break;	
+			case 8:
+				this.modifierNomUsagerAdmin();
+				break;
+			case 9:
+				this.modifierIdAdmin();
+				break;
 
 			default:
 				System.out.println("Veuillez entrer un nombre indiqué au menu\n");
+				break;
 
 			}
 
@@ -61,35 +67,43 @@ public class AdminService {
 			menu();
 		}
 	}
+
 	private void creerProjet() throws IOException {
-		
-		}
-	private void supprimerProjet() throws IOException {
-		
-		}
-	private void ajouterEmploye() throws IOException {
-		
-		}
-	private void assignerProjet() throws IOException {
-		
-		}
-	private void ajouterDisciplineProjet() throws IOException {
-		
-		}
-	private void supprimerEmploye() throws IOException {
-		
-		
-		}
-	private void modifierNPE() throws IOException {
-		
-		}
-	private void modifierNomUsager() throws IOException {
-		
-		}
-	
-	private void modifierID() throws IOException {
-		
+
 	}
+
+	private void supprimerProjet() throws IOException {
+
+	}
+
+	private void ajouterEmploye() throws IOException {
+
+	}
+
+	private void assignerProjet() throws IOException {
+
+	}
+
+	private void ajouterDisciplineProjet() throws IOException {
+
+	}
+
+	private void supprimerEmploye() throws IOException {
+
+	}
+
+	private void modifierNPE() throws IOException {
+
+	}
+
+	private void modifierNomUsager() throws IOException {
+
+	}
+
+	private void modifierID() throws IOException {
+
+	}
+
 	private void deconnecter() throws IOException {
 		Main.main(null);
 	}
@@ -109,6 +123,7 @@ public class AdminService {
 		return returnString;
 	}
 
+	//Q11 nom usager
 	public boolean modifierNomUsagerAdmin() throws IOException {
 
 		List<Admin> listAdmin = (List<Admin>) this.resourceService.lireLesDonnees("admins", Admin.class);
@@ -116,11 +131,11 @@ public class AdminService {
 
 		String actuelNomUsage = recupererLesEntree("Entree le nom d'usage actuel :");
 
-		for (Admin admin : listAdmin) {	 
-			//test si ce nom existe
+		for (Admin admin : listAdmin) {
+			// test si ce nom existe
 			if (admin.getNomUtilisateur().equals(actuelNomUsage)) {
-				nouvelNomUsage = recupererLesEntree("Entree le nouveau d'usage :");				
-				if (nouvelNomUsage.length() != 0) {					
+				nouvelNomUsage = recupererLesEntree("Entree le nouveau d'usage :");
+				if (nouvelNomUsage.length() != 0) {
 					// Verifier si ce nom d'ulisateur existe deja
 					for (Admin checkAdmin : listAdmin) {
 						if (admin.getNomUtilisateur().equals(nouvelNomUsage)) {
@@ -129,25 +144,82 @@ public class AdminService {
 							return false;
 						}
 					}
-					//modifier le nom
-					admin.setNomUtilisateur(nouvelNomUsage); 				
+					// modifier le nom
+					admin.setNomUtilisateur(nouvelNomUsage);
 				}
-				listAdmin.set(listAdmin.indexOf(admin), admin); 
-				
-				if(this.resourceService.modifierDonnee("admins", listAdmin)) {
+				listAdmin.set(listAdmin.indexOf(admin), admin);
+
+				if (this.resourceService.modifierDonnee("admins", listAdmin)) {
 					System.out.println("** Nom d'usage modifié avec succes **\n");
 					this.menu();
-				}				
+				}
 				return true;
-			}else {
-				System.out.println("*** Nom d'usage inconnu ***");
+			} else {
+				System.out.println("*** Nom d'usage inconnu ***\n");
 				this.menu();
 				return false;
 			}
 		}
- 
-		
-		
+
+		return true;
+	}
+
+	//Q11 modifier ID
+	public boolean modifierIdAdmin() throws IOException {
+
+		List<Admin> listAdmin = (List<Admin>) this.resourceService.lireLesDonnees("admins", Admin.class);
+		int nouvelId = 0;
+
+		boolean estNombre = false;
+		int actuelId = 0;
+
+		while (!estNombre) {
+			try {
+				actuelId = Integer.parseInt(recupererLesEntree("Entree l'ID actuel :"));
+				estNombre = true;
+			} catch (NumberFormatException e) {
+				System.out.println("** Veuillez entrer votre nom un entier **");
+				estNombre = false;
+			}
+		}
+		estNombre=false;
+		for (Admin admin : listAdmin) {
+			// test si le id existe
+			if (admin.getId() == actuelId) {
+				while (!estNombre) {
+					try {
+						nouvelId = Integer.parseInt(recupererLesEntree("Entree le nouveau id :"));
+						estNombre = true;
+					} catch (NumberFormatException e) {
+						System.out.println("**Veuillez entrer votre nom un entier **");
+						estNombre = false;
+					}
+				}
+				
+				// Verifier si ce nom l'id existe deja
+				for (Admin checkAdmin : listAdmin) {
+					if (admin.getId() == nouvelId) {
+						System.out.println("Cet id existe deja\n");
+						this.menu();
+						return false;
+					}
+				}
+				// modifier l'id
+				admin.setId(nouvelId); 
+				listAdmin.set(listAdmin.indexOf(admin), admin);
+
+				if (this.resourceService.modifierDonnee("admins", listAdmin)) {
+					System.out.println("** L'id est modifié avec succes **\n");
+					this.menu();
+				}
+				return true;
+			} else {
+				System.out.println("*** L'id est inconnu **\n");
+				this.menu();
+				return false;
+			}
+		}
+
 		return true;
 	}
 
