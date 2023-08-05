@@ -1,23 +1,20 @@
 enum Disciplines {
-  //les attributs
-  DESIGN1(""),
-  DESIGN2(""),
-  IMPLEMENTATION(""),
-  TEST(""),
-  DEPLOIEMENT("");
-  private String etat;
-
-  //le constructeur
-  Disciplines(String etat){
-    this.etat = etat;
-  }
+    //les attributs
+    DESIGN1("design1 (haut niveau)"),
+    DESIGN2("design2 (détaillé)"),
+    IMPLEMENTATION("implémentation"),
+    TEST("test"),
+    DEPLOIEMENT("déploiement");
+    
+    private final String label;
   
-  //les getters et setters
-  public String getEtat(){
-    return etat;
-  }
-  public void setEtat(String e){
-    this.etat = e;
-  }
-
+    //le constructeur
+    Disciplines(String label){
+      this.label = label;
+    }
+    
+    //les getters et setters
+    public String getEtat(){
+      return label;
+    } 
 }
