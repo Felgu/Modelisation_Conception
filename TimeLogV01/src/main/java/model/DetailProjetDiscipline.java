@@ -25,6 +25,13 @@ public class DetailProjetDiscipline {
 
 
 
+	public DetailProjetDiscipline() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+
+
 	public int getIdDetailProjetDiscipline() {
 		return idDetailProjetDiscipline;
 	}

@@ -4,11 +4,16 @@
 package service;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import model.Activite;
 import model.Admin;
 import model.Discipline;
 import model.Employe;
@@ -29,6 +34,7 @@ public class InitTimeLogService extends ResourceService {
 		saveDiscipline(); 
 		saveDetailProjetDiscipline();
 		saveEmployeProjet();
+		saveEmployeActivite();
 	}
 
 	// 3 project lors du demarage de systeme
@@ -129,5 +135,47 @@ public class InitTimeLogService extends ResourceService {
 			} 
 		}		 
 		 this.saveInit(employeProjets, "employeProjets");
+	 }
+	 
+	 
+	 //initiation employe activité
+	 public void saveEmployeActivite() throws IOException {
+		
+		 List<EmployeProjet> employeProjets = (List<EmployeProjet>) this.lireLesDonnees("employeProjets", EmployeProjet.class);
+		 List<DetailProjetDiscipline> detailProjetDisciplines = (List<DetailProjetDiscipline>) this.lireLesDonnees("detailProjetDisciplines", DetailProjetDiscipline.class);
+		 
+		 List<Activite> activites= new ArrayList();
+		 
+		 int idProjet =0;
+		 int idDiscipline=0;
+		 int idEmploye=0;
+		 int nbrJr=1;
+		 LocalTime heureDebutActivite = LocalTime.of(7, 0, 0);
+		 LocalDate localDate = LocalDate.now();
+		 
+		  for (EmployeProjet employeProjet : employeProjets) {
+			  heureDebutActivite = LocalTime.of(7, 0, 0);
+				idEmploye = employeProjet.getIdEmploye();
+			if (employeProjet.getIdProjet() != idProjet && employeProjet.getIdEmploye() == idEmploye) {
+				for (DetailProjetDiscipline detailProjetDiscipline : detailProjetDisciplines) {
+					if (employeProjet.getIdProjet() ==  detailProjetDiscipline.getIdProjet() && detailProjetDiscipline.getIdDiscpline() != idDiscipline) {
+				
+						heureDebutActivite=	heureDebutActivite.plusHours(1);
+						while (nbrJr <=10) { 
+							activites.add(new Activite(employeProjet.getIdEmploye(), detailProjetDiscipline.getIdDetailProjetDiscipline(),localDate.minusDays(nbrJr).toString(), heureDebutActivite.toString(), heureDebutActivite.plusHours(1).toString()));
+					 		nbrJr++;	
+						}						
+						idDiscipline = detailProjetDiscipline.getIdDiscpline();
+						localDate=	localDate.now();
+					}
+					nbrJr=1;
+					
+				}
+				 
+			}
+			
+		}
+		  
+		  this.saveInit(activites, "activites");
 	 }
 }
