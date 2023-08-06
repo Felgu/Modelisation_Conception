@@ -4,11 +4,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import _TimeLogV01.Main;
 import model.Admin;
 import model.Discipline;
 import model.Employe;
+import model.EmployeProjet;
+import model.Projet;
 
 public class AdminService {
 
@@ -50,6 +54,9 @@ public class AdminService {
 			case 0:
 				this.deconnecter();
 				break;
+			case 4:
+				this.assignerProjet();
+				break;		
 			case 5:
 				this.ajouterDisciplineProjet();
 				break;	
@@ -91,8 +98,64 @@ public class AdminService {
 
 	}
 
-	private void assignerProjet() throws IOException {
+	//Q9 assigner un employe au projet
+	private boolean assignerProjet() throws IOException {
+		
+		List<EmployeProjet> employeProjets = (List<EmployeProjet>) this.resourceService.lireLesDonnees("employeProjets", EmployeProjet.class);
+		List<Employe> employes = (List<Employe>) this.resourceService.lireLesDonnees("employes", Employe.class);
+		List<Projet> projets = (List<Projet>) this.resourceService.lireLesDonnees("projets", Projet.class);
+		
+		int idEmploye = Integer.parseInt(recupererLesEntree("Entree l'ID de l'employe:"));		
+		 
+		Employe getEmployeById = employes.stream().filter(employe -> employe.getId() == idEmploye).findFirst().get();
+		Long verifierEmployeNbrDeProjet = employeProjets.stream().filter( employeProjet -> employeProjet.getIdEmploye() == idEmploye).count();
+		boolean estNombre = false;
+		//check si l'id existe		
+		if (getEmployeById == null) {		 
+			System.out.println("*** Id inconnue... ***\n");
+			menu();
+			return false;
+		}
+		
+		if (verifierEmployeNbrDeProjet < getEmployeById.getNpe()) {
+		
+			List<Integer> recupererIdsProjetEmploye = employeProjets.stream().filter(employeProjet -> employeProjet.getIdProjet() == idEmploye).map(EmployeProjet::getIdProjet).collect(Collectors.toList());
 
+			projets = projets.stream().filter(_projets-> !recupererIdsProjetEmploye.contains(_projets.getIdProjet())).collect(Collectors.toList());
+			
+			System.out.println("\n**Choisisez le projet**\n");
+			for (Projet projet : projets) {
+				
+				System.out.println(""+ projet.getIdProjet() + " " +projet.getNomProjet());
+			}			 
+			while (!estNombre) {
+				try {
+					int choixProjet = Integer.parseInt(recupererLesEntree(""));
+					estNombre = true;
+					
+					if (projets.stream().filter( projet -> projet.getIdProjet() == choixProjet).findFirst().isPresent() ) {
+						employeProjets.add(new EmployeProjet(idEmploye, choixProjet));
+					}else {
+						System.out.println("\n** Choix de projet incorrect **\n");
+						menu();
+						return false;
+					}
+				} catch (NumberFormatException e) {
+					System.out.println("** Veuillez entrer un entier **");
+					estNombre = false;
+				}
+			}		 
+			
+			this.resourceService.modifierDonnee("employeProjets", employeProjets);
+			System.out.println("**L'emplye " + getEmployeById.getNom() + " est assiné avec succès au projet**\n");
+			menu();
+			return true;
+		}
+		
+		System.out.println("*** L'emploie " + getEmployeById.getNom()+ " n'est peut etre assigné à un autre projet car son NPE est " + getEmployeById.getNpe() + "\n");
+		menu();
+		
+		return false;
 	}
 
 	private void ajouterDisciplineProjet() throws IOException {
