@@ -54,6 +54,12 @@ public class AdminService {
 			case 0:
 				this.deconnecter();
 				break;
+			case 1:
+				this.creerProjet();
+				break;
+			case 2:
+				this.supprimerProjet();
+				break;	
 			case 4:
 				this.assignerProjet();
 				break;		
@@ -86,12 +92,74 @@ public class AdminService {
 		}
 	}
 
-	private void creerProjet() throws IOException {
+	private boolean creerProjet() throws IOException {
 
+		List<Projet> projets = (List<Projet>) this.resourceService.lireLesDonnees("projets", Projet.class);
+		String nomProjet = recupererLesEntree("Nom projet:");
+		
+		//verifier si le nom projet existe
+		if(projets.stream().filter(projet-> projet.getNomProjet().equalsIgnoreCase(nomProjet)).findFirst().isPresent()) {
+			System.out.println("** Le projet <"+nomProjet+"> existe déja**");
+			
+			int choix = Integer.parseInt(recupererLesEntree("Appuyer sur 1 pour recommencer ..."));
+			
+			if (choix ==1) {
+				this.creerProjet();
+				return false;
+			}
+			
+			menu();
+			return false;
+		}
+		
+		projets.add(new Projet(nomProjet));
+		this.resourceService.modifierDonnee("projets", projets);
+		
+		System.out.println("**Le projet <"+nomProjet+"> est ajouté avec succès ... **\n");
+		menu();
+		return true;
 	}
 
-	private void supprimerProjet() throws IOException {
+	private boolean supprimerProjet() throws IOException {
 
+		List<Projet> projets = (List<Projet>) this.resourceService.lireLesDonnees("projets", Projet.class);
+		
+		for (Projet projet : projets) {
+			System.out.println("" + projet.getIdProjet() + " "+projet.getNomProjet());
+		}
+		
+		int idProjetASupprimer = Integer.parseInt(recupererLesEntree("Entre le num du projet:"));
+		
+		//Test si la valeur correspond à l'Id affiché
+		if (!projets.stream().filter(projet-> projet.getIdProjet() == idProjetASupprimer ).findFirst().isPresent()) {
+			
+			System.out.println("** Veuillez entrer le numéro de projet affiché **");			
+			
+			try {
+				
+				int choix = Integer.parseInt(recupererLesEntree("Appuyer sur 1 pour recommencer ..."));				
+				if (choix ==1) {
+					this.supprimerProjet();
+					return false;
+				}
+			} catch (NumberFormatException e) {
+				System.out.println("** Veuillez entrer le numéro de projet affiché **");
+				this.supprimerEmploye();
+				return false;
+			}
+			
+			menu();
+			return false;
+		}
+		
+		//supprimer le projet
+		projets.removeIf(projet-> projet.getIdProjet() == idProjetASupprimer);
+		
+		this.resourceService.modifierDonnee("projets", projets);
+		System.out.println("** Le projet a été supprimé avec  succès **\n");
+		menu();
+		 
+		return true;
 	}
 
 	private void ajouterEmploye() throws IOException {
@@ -119,7 +187,7 @@ public class AdminService {
 		
 		if (verifierEmployeNbrDeProjet < getEmployeById.getNpe()) {
 		
-			List<Integer> recupererIdsProjetEmploye = employeProjets.stream().filter(employeProjet -> employeProjet.getIdProjet() == idEmploye).map(EmployeProjet::getIdProjet).collect(Collectors.toList());
+			List<Integer> recupererIdsProjetEmploye = employeProjets.stream().filter(employeProjet -> employeProjet.getIdEmploye() == idEmploye).map(EmployeProjet::getIdProjet).collect(Collectors.toList());
 
 			projets = projets.stream().filter(_projets-> !recupererIdsProjetEmploye.contains(_projets.getIdProjet())).collect(Collectors.toList());
 			
@@ -130,7 +198,7 @@ public class AdminService {
 			}			 
 			while (!estNombre) {
 				try {
-					int choixProjet = Integer.parseInt(recupererLesEntree(""));
+					int choixProjet = Integer.parseInt(recupererLesEntree("Entre le numero de projet affiché: "));
 					estNombre = true;
 					
 					if (projets.stream().filter( projet -> projet.getIdProjet() == choixProjet).findFirst().isPresent() ) {
@@ -147,7 +215,7 @@ public class AdminService {
 			}		 
 			
 			this.resourceService.modifierDonnee("employeProjets", employeProjets);
-			System.out.println("**L'emplye " + getEmployeById.getNom() + " est assiné avec succès au projet**\n");
+			System.out.println("**L'emplye " + getEmployeById.getNom() + " est assigné avec succès au projet**\n");
 			menu();
 			return true;
 		}
