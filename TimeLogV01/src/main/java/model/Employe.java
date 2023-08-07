@@ -26,8 +26,20 @@ public class Employe extends Utilisateur {
 		this.id = ++lastEmployeId;
 		this.nomUtilisateur = nom+this.id;
 	}
-	
-	
+		
+
+	public Employe(String nom, String poste, String nas) {
+		super(nom);
+		this.poste = poste;
+		this.nas = nas;
+		
+		this.dateEmbauche = formatDate();
+		this.id = ++lastEmployeId;
+		this.nomUtilisateur = nom.trim()+this.id;
+	}
+
+
+
 
 	public Employe() { 
 	}

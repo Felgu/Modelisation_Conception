@@ -60,6 +60,9 @@ public class AdminService {
 			case 2:
 				this.supprimerProjet();
 				break;	
+			case 3:
+				this.ajouterEmploye();
+				break;		
 			case 4:
 				this.assignerProjet();
 				break;		
@@ -164,6 +167,20 @@ public class AdminService {
 
 	private void ajouterEmploye() throws IOException {
 
+		List<Employe> employes = (List<Employe>) this.resourceService.lireLesDonnees("employes", Employe.class);
+		
+		String nomEmploye = recupererLesEntree("Entrez le nom :");
+		String poste = recupererLesEntree("Entrez le poste :");
+		String nas = recupererLesEntree("Entrez le NAS :"); 
+		
+		employes.add(new Employe(nomEmploye, poste, nas));
+		
+		//savegarder
+		this.resourceService.modifierDonnee("employes",employes);
+		
+		System.out.println("** "+nomEmploye.toUpperCase() + " est ajouté avec l'ID " +employes.stream().reduce((first,last)->last).get().getId() + "**\n");
+		
+		menu();
 	}
 
 	//Q9 assigner un employe au projet
@@ -175,8 +192,8 @@ public class AdminService {
 		
 		int idEmploye = Integer.parseInt(recupererLesEntree("Entree l'ID de l'employe:"));		
 		 
-		Employe getEmployeById = employes.stream().filter(employe -> employe.getId() == idEmploye).findFirst().get();
-		Long verifierEmployeNbrDeProjet = employeProjets.stream().filter( employeProjet -> employeProjet.getIdEmploye() == idEmploye).count();
+		Employe getEmployeById = employes.stream().filter(employe -> employe.getId() == idEmploye).findFirst().isPresent() ? employes.stream().filter(employe -> employe.getId() == idEmploye).findFirst().get() : null;
+	 	Long verifierEmployeNbrDeProjet = employeProjets.stream().filter( employeProjet -> employeProjet.getIdEmploye() == idEmploye).count();
 		boolean estNombre = false;
 		//check si l'id existe		
 		if (getEmployeById == null) {		 
