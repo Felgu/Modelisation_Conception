@@ -108,7 +108,7 @@ public class InitTimeLogService extends ResourceService {
 		 
 		 for (Projet projet : projets) {
 			 for (Discipline discipline : disciplines) {
-				detailProjetDisciplines.add(new DetailProjetDiscipline(projet.getIdProjet(), discipline.getIdDiscipline(), budgetParDiscpline.nextInt(1000, 8000)));
+				detailProjetDisciplines.add(new DetailProjetDiscipline(projet.getIdProjet(), discipline.getIdDiscipline(), budgetParDiscpline.nextInt(500, 3000)));
 			}
 		}
 		 
