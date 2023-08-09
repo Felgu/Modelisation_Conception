@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,6 +41,9 @@ public class RapportService {
 			case 1:
 				rapportEtatProjet();
 				break;
+			case 2:
+				rapportGlobalProjet();
+				break;	
 
 			default:
 				System.out.println("Veuillez entrer un nombre indiqué au menu\n");
@@ -91,16 +95,16 @@ public class RapportService {
 		
 		System.out.println("\n** Rapport d'état "+ nomProjet + " **\n");
 		
-		System.out.printf("%-20s %-20s %-20s %-20s%n", "Discipline", "Nbr heure travaillé", "% Avancement", "HeureBudgétées\n");
+		System.out.printf("%-20s %-20s %-20s %-20s%n", "Discipline", "Nbr heure travaillé", "% Avancement", "Heures Budgétées\n");
 		for (DetailProjetDiscipline detailProjetDiscipline : detailProjetDisciplines) { 
 			heures = calculeNombreHeureParDisciple(detailProjetDiscipline.getIdDetailProjetDiscipline());
 			System.out.printf("%-20s %-20.2f %-20.2f %-20.2f%n", recupererNomDiscpline(detailProjetDiscipline.getIdDiscpline()),heures, calculePourcentageEstimeParDiscipline(heures, detailProjetDiscipline.getNbrHeureBudgetees()) , detailProjetDiscipline.getNbrHeureBudgetees());
 			}
 
 		//Afficher total heures 
-		System.out.println("\nTotal heures travaillés projets : " +calculeNombreHeureTotalProjet(idProjet).toHours() + ":" +calculeNombreHeureTotalProjet(idProjet).toMinutesPart());
+		System.out.println("\nTotal heures travaillés : " +calculeNombreHeureTotalProjet(idProjet).toHours() + ":" +calculeNombreHeureTotalProjet(idProjet).toMinutesPart());
 		
-		String retourMenu = recupererLesEntree("\nAppuyer sur une touche pour retourner au menu");
+		String retourMenu = recupererLesEntree("\nAppuyer sur entrer pour retourner au menu");
 		
 		
 		if (retourMenu != null) {
@@ -108,7 +112,31 @@ public class RapportService {
 		}
 		return true;
 	}
-
+	
+	// Q2
+		public boolean rapportGlobalProjet() throws IOException {
+			List<Projet> projets = (List<Projet>) this.resourceService.lireLesDonnees("projets", Projet.class);
+			String heureTotal;
+			
+			System.out.println("\n** Rapport global **\n");
+			
+			System.out.printf("%-20s %-20s%n", "Projet", "Nbr heure travaillé\n");
+			for (Projet projet : projets) {
+				 heureTotal = calculeNombreHeureTotalProjet(projet.getIdProjet()).toHours()+":"+ calculeNombreHeureTotalProjet(projet.getIdProjet()).toMinutesPart();
+				 
+				System.out.printf("%-20s %-20s%n", projet.getNomProjet(),heureTotal);
+						
+			}
+			String retourMenu = recupererLesEntree("\nAppuyer sur entrer pour retourner au menu");
+			
+			
+			if (retourMenu != null) {
+				new AdminService().menu();;
+			}
+			return true;
+		}
+		
+		
 	double calculeNombreHeureParDisciple(int idDetailProjetDiscipline) throws IOException {
 		List<Activite> activites = (List<Activite>) this.resourceService.lireLesDonnees("activites", Activite.class);
 		
@@ -116,6 +144,7 @@ public class RapportService {
 		
 		return totalDuree.toHours() + totalDuree.toMinutesPart() / 60.0;
 	}
+	
 	
 	private Duration calculeNombreHeureTotalProjet(int idProjet) throws IOException {
 		
