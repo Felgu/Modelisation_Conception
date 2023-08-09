@@ -98,8 +98,7 @@ public class RapportService {
 			heures = calculeNombreHeureParDisciple(detailProjetDiscipline.getIdDetailProjetDiscipline()).toHours();
 			min = calculeNombreHeureParDisciple(detailProjetDiscipline.getIdDetailProjetDiscipline()).toMinutesPart();
 			
-			/*System.out.println(recupererNomDiscpline(detailProjetDiscipline.getIdDiscpline()) + " " + ""+heures + ":"+min + 
-					" % avancement " + calculePourcentageEstimeParDiscipline(heures, heures));*/
+			System.out.println(recupererNomDiscpline(detailProjetDiscipline.getIdDiscpline()) + " " + ""+heures + ":"+min);
 			}
 
 		//Afficher total heures
