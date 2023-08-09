@@ -5,16 +5,12 @@ package service;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.io.Files;
-
-import model.Projet;
+import com.fasterxml.jackson.databind.ObjectMapper; 
 
 /**
  * Classe pour gérer la persistance(sauvegarde) JSON 
@@ -25,7 +21,7 @@ public class ResourceService {
 	private File fichierDB; // fichier base de la donnee
 	private Map<String, List<?>> tables;
 
-	private String fileName = "src/main/resources/dataBase.json";
+	private String fileName = "dataBase.json";
 
 	public ResourceService() {
 
