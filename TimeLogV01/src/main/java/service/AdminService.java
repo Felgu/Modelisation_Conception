@@ -460,7 +460,7 @@ public class AdminService {
 					}
 				}
 
-				if (désassignerEmployeProjet(employe, nouvauNPe)) {
+				if (desassignerEmployeProjet(employe, nouvauNPe)) {
 
 					// modifier l'id
 					employe.setNpe(nouvauNPe);
@@ -480,7 +480,7 @@ public class AdminService {
 	}
 
 	// Cette fonction permet de desAssignerEmployeProjet
-	public boolean désassignerEmployeProjet(Employe employe, int nouveauNpe) throws IOException {
+	public boolean desassignerEmployeProjet(Employe employe, int nouveauNpe) throws IOException {
 
 		boolean estNombre = false;
 		int choix = 0;

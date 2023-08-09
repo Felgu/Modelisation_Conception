@@ -12,14 +12,14 @@ public class DetailProjetDiscipline {
 	private int idProjet;
 	private int idDiscpline;
 	private String etat; // etat d'avancement
-	private double budget; // montant prevu pour une discpline dans un projet	
+	private double nbrHeureBudgetees; // montant prevu pour une discpline dans un projet	
  
 	private static int lastDetaild = 0;
 	
-	public DetailProjetDiscipline(int idProjet, int idDiscpline, double budget) { 
+	public DetailProjetDiscipline(int idProjet, int idDiscpline, double nbrHeureBudgetees) { 
 		this.idProjet = idProjet;
 		this.idDiscpline = idDiscpline;
-		this.budget = budget;
+		this.nbrHeureBudgetees = nbrHeureBudgetees;
 		this.idDetailProjetDiscipline= ++lastDetaild;
 	}
 
@@ -56,13 +56,19 @@ public class DetailProjetDiscipline {
 	public void setEtat(String etat) {
 		this.etat = etat;
 	}
-	public double getBudget() {
-		return budget;
+
+
+
+	public double getNbrHeureBudgetees() {
+		return nbrHeureBudgetees;
 	}
-	public void setBudget(double budget) {
-		this.budget = budget;
+
+
+
+	public void setNbrHeureBudgetees(double nbrHeureBudgetees) {
+		this.nbrHeureBudgetees = nbrHeureBudgetees;
 	}
-	
+ 
 	
 	
 }

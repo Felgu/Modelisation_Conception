@@ -108,7 +108,7 @@ public class InitTimeLogService extends ResourceService {
 		 
 		 for (Projet projet : projets) {
 			 for (Discipline discipline : disciplines) {
-				detailProjetDisciplines.add(new DetailProjetDiscipline(projet.getIdProjet(), discipline.getIdDiscipline(), budgetParDiscpline.nextInt(1000, 99999)));
+				detailProjetDisciplines.add(new DetailProjetDiscipline(projet.getIdProjet(), discipline.getIdDiscipline(), budgetParDiscpline.nextInt(1000, 8000)));
 			}
 		}
 		 
@@ -147,19 +147,20 @@ public class InitTimeLogService extends ResourceService {
 		 int idDiscipline=0;
 		 int idEmploye=0;
 		 int nbrJr=1;
+		 long heureTravaille=1;
 		 LocalTime heureDebutActivite = LocalTime.of(7, 0, 0);
 		 LocalDate localDate = LocalDate.now();
 		 
 		  for (EmployeProjet employeProjet : employeProjets) {
 			  heureDebutActivite = LocalTime.of(7, 0, 0);
-				idEmploye = employeProjet.getIdEmploye();
+			  idEmploye = employeProjet.getIdEmploye();
 			if (employeProjet.getIdProjet() != idProjet && employeProjet.getIdEmploye() == idEmploye) {
 				for (DetailProjetDiscipline detailProjetDiscipline : detailProjetDisciplines) {
 					if (employeProjet.getIdProjet() ==  detailProjetDiscipline.getIdProjet() && detailProjetDiscipline.getIdDiscpline() != idDiscipline) {
 				
 						heureDebutActivite=	heureDebutActivite.plusHours(1);
 						while (nbrJr <=10) { 
-							activites.add(new Activite(employeProjet.getIdEmploye(), detailProjetDiscipline.getIdDetailProjetDiscipline(),localDate.minusDays(nbrJr).toString(), heureDebutActivite.toString(), heureDebutActivite.plusHours(1).toString()));
+							activites.add(new Activite(employeProjet.getIdEmploye(), detailProjetDiscipline.getIdDetailProjetDiscipline(),localDate.minusDays(nbrJr).toString(), heureDebutActivite.toString(), heureDebutActivite.plusHours(1).plusMinutes(heureTravaille).toString()));
 					 		nbrJr++;	
 						}						
 						idDiscipline = detailProjetDiscipline.getIdDiscpline();
@@ -170,7 +171,7 @@ public class InitTimeLogService extends ResourceService {
 				}
 				 
 			}
-			
+			heureTravaille++;
 		}
 		  
 		  this.saveInit(activites, "activites");
