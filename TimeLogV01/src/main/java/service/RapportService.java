@@ -89,22 +89,27 @@ public class RapportService {
 		List<DetailProjetDiscipline> detailProjetDisciplines = (List<DetailProjetDiscipline>) this.resourceService.lireLesDonnees("detailProjetDisciplines", DetailProjetDiscipline.class);
 
 		detailProjetDisciplines = detailProjetDisciplines.stream().filter(detail -> detail.getIdProjet() == idProjet).collect(Collectors.toList());
+		double nbrHeureEstime =  0.0;
 		
 		double heures; // heures d'activité 
 
 		
-		System.out.println("\n** Rapport d'état "+ nomProjet + " **\n");
+		System.out.println("\n** Rapport d'état "+ nomProjet + " **\n"); //Affichage titre de raport
 		
 		System.out.printf("%-20s %-20s %-20s %-20s%n", "Discipline", "Nbr heure travaillé", "% Avancement", "Heures Budgétées\n");
 		for (DetailProjetDiscipline detailProjetDiscipline : detailProjetDisciplines) { 
+			nbrHeureEstime += detailProjetDiscipline.getNbrHeureBudgetees();
 			heures = calculeNombreHeureParDisciple(detailProjetDiscipline.getIdDetailProjetDiscipline());
-			System.out.printf("%-20s %-20.2f %-20.2f %-20.2f%n", recupererNomDiscpline(detailProjetDiscipline.getIdDiscpline()),heures, calculePourcentageEstimeParDiscipline(heures, detailProjetDiscipline.getNbrHeureBudgetees()) , detailProjetDiscipline.getNbrHeureBudgetees());
+			System.out.printf("%-20s %-20.2f %-20.2f %-20.2f%n", recupererNomDiscpline(detailProjetDiscipline.getIdDiscpline()),heures, calculePourcentageEstime(heures, detailProjetDiscipline.getNbrHeureBudgetees()) , detailProjetDiscipline.getNbrHeureBudgetees());
 			}
 
 		//Afficher total heures 
 		System.out.println("\nTotal heures travaillés : " +calculeNombreHeureTotalProjet(idProjet).toHours() + ":" +calculeNombreHeureTotalProjet(idProjet).toMinutesPart());
 		
-		String retourMenu = recupererLesEntree("\nAppuyer sur entrer pour retourner au menu");
+		//le pourcentage estimée d’avancement total
+		System.out.printf("Pourcentage estimée d’avancement total : %2f" , this.calculePourcentageEstime(calculeNombreHeureTotalProjet(idProjet).toHours() + calculeNombreHeureTotalProjet(idProjet).toMinutesPart() / 60.0, nbrHeureEstime));
+		
+		String retourMenu = recupererLesEntree("\n\nAppuyer sur entrer pour retourner au menu");
 		
 		
 		if (retourMenu != null) {
@@ -116,15 +121,15 @@ public class RapportService {
 	// Q2
 		public boolean rapportGlobalProjet() throws IOException {
 			List<Projet> projets = (List<Projet>) this.resourceService.lireLesDonnees("projets", Projet.class);
-			String heureTotal;
+			String heureTotalTravailee;
 			
 			System.out.println("\n** Rapport global **\n");
 			
-			System.out.printf("%-20s %-20s%n", "Projet", "Nbr heure travaillé\n");
+			System.out.printf("%-20s %-20s %-20s%n", "Nom projet", "Nbr heure travaillé", "% Avancement");
 			for (Projet projet : projets) {
-				 heureTotal = calculeNombreHeureTotalProjet(projet.getIdProjet()).toHours()+":"+ calculeNombreHeureTotalProjet(projet.getIdProjet()).toMinutesPart();
+				heureTotalTravailee = calculeNombreHeureTotalProjet(projet.getIdProjet()).toHours()+":"+ calculeNombreHeureTotalProjet(projet.getIdProjet()).toMinutesPart();
 				 
-				System.out.printf("%-20s %-20s%n", projet.getNomProjet(),heureTotal);
+				System.out.printf("\n%-20s %-20s %-20.2f%n", projet.getNomProjet(),heureTotalTravailee, calculePourcentageEstime(calculeNombreHeureTotalProjet(projet.getIdProjet()).toHours() + calculeNombreHeureTotalProjet(projet.getIdProjet()).toMinutesPart()/60.0,totalBudgeteProjet(projet.getIdProjet())));
 						
 			}
 			String retourMenu = recupererLesEntree("\nAppuyer sur entrer pour retourner au menu");
@@ -136,7 +141,15 @@ public class RapportService {
 			return true;
 		}
 		
+	
 		
+	private double totalBudgeteProjet(int idProjet) throws IOException {
+	
+		List<DetailProjetDiscipline> detailProjetDisciplines = (List<DetailProjetDiscipline>) this.resourceService.lireLesDonnees("detailProjetDisciplines", DetailProjetDiscipline.class);
+		
+		return detailProjetDisciplines.stream().filter(detail -> detail.getIdProjet() == idProjet).mapToDouble(DetailProjetDiscipline::getNbrHeureBudgetees).sum();
+	}
+	
 	double calculeNombreHeureParDisciple(int idDetailProjetDiscipline) throws IOException {
 		List<Activite> activites = (List<Activite>) this.resourceService.lireLesDonnees("activites", Activite.class);
 		
@@ -145,7 +158,7 @@ public class RapportService {
 		return totalDuree.toHours() + totalDuree.toMinutesPart() / 60.0;
 	}
 	
-	
+	//total heure travaillé
 	private Duration calculeNombreHeureTotalProjet(int idProjet) throws IOException {
 		
 		List<Activite> activites = (List<Activite>) this.resourceService.lireLesDonnees("activites", Activite.class);
@@ -161,12 +174,14 @@ public class RapportService {
 		return totalDuree;
 	}
 	
-	private double calculePourcentageEstimeParDiscipline(double heureTravallee,double heureBudgete) throws IOException {
+	private double calculePourcentageEstime(double heureTravallee,double heureBudgete) throws IOException {
 		
 		 double pourcentageTravaille = (heureTravallee/heureBudgete) * 100;
 		 
 		 return pourcentageTravaille;
 	}
+	
+	 
 
 	String recupererNomDiscpline(int idDiscipline) throws IOException {
 
