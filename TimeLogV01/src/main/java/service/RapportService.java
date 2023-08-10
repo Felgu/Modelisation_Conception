@@ -4,8 +4,12 @@ import java.awt.Menu;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,6 +34,7 @@ public class RapportService {
 		System.out.println("1. Rapport d'état d'un projet");
 		System.out.println("2. Rapport d'état global");
 		System.out.println("3. Rapport de salaire d'un employé");
+		System.out.println("0. Retour au menu");
 		System.out.println();
 
 		try {
@@ -39,6 +44,9 @@ public class RapportService {
 
 			switch (nbrChosi) {
 
+			case 0:
+				new AdminService().menu();
+				break;
 			case 1:
 				rapportEtatProjet();
 				break;
@@ -148,15 +156,70 @@ public class RapportService {
 		
 	//Q3
 		
-	private void rapportSalaire() {
+	private boolean rapportSalaire() throws IOException {
 		
+		List<Activite> activites = (List<Activite>) this.resourceService.lireLesDonnees("activites", Activite.class);
+		int idEmploye;
 		try {
-			int idEmploye = Integer.parseInt(recupererLesEntree("\n\nEntrer l'id employé"));
-			//string idEmploye = Integer.parseInt(recupererLesEntree("\n\nEntrer l'id employé"));
-		} catch (Exception e) {
-			// TODO: handle exception
+			idEmploye = Integer.parseInt(recupererLesEntree("Entrer l'ID de l'employé "));
+			 
+		} catch (NumberFormatException e) {
+			System.out.println("** Veuillez entrer un entier comme ID **"); 
+			menuRapport();
+			return false;
 		}
+		
+		//verifier si l'employé a fait une activite
+		if (!activites.stream().filter(activite -> activite.getIdEmploye() == idEmploye).findFirst().isPresent()) {
+			System.out.println("** Cet employé n'a pas activité **"); 
+			menuRapport();
+			return false;
+		}
+		
+		System.out.println("Entrer l'intervalle de date");
+		
+		String dateDebut = recupererLesEntree("Entrer la date de debut (d-m-Y)");
+		String dateFin = recupererLesEntree("Entrer la date de debut (d-m-Y)");
+		
+		for (Activite activite : filtrerActiviteParDateRange(dateDebut,dateFin)) {
+			
+			System.out.println(activite.getDateDebut());
+			
+		}
+		
+		System.out.println("tet");
+		return true;
 	}
+	
+	public List<Activite> filtrerActiviteParDateRange(String dateDebut, String dateFin) throws IOException {
+		
+		List<Activite> activites = (List<Activite>) this.resourceService.lireLesDonnees("activites", Activite.class);
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+            Date dateDebut_ = dateFormat.parse(dateDebut);
+            Date dateFin_ = dateFormat.parse(dateFin);
+
+            activites= activites.stream()
+                    .filter(activite -> {
+                        try {
+                            Date activiteDate = dateFormat.parse(activite.getDateDebut());
+                            return activiteDate.after(dateDebut_) && activiteDate.before(dateFin_);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                            return false;
+                        }
+                    })
+                    .collect(Collectors.toList());
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return new ArrayList<>(); // Return an empty list if parsing fails
+        }
+        
+        return activites;
+    }
+	
 		
 	private double totalBudgeteProjet(int idProjet) throws IOException {
 	
