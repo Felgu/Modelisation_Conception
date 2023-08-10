@@ -1,5 +1,4 @@
 package service;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -15,9 +14,9 @@ import model.EmployeProjet;
 import model.Projet;
 
 public class AdminService {
-
+	//les attributs
 	private ResourceService resourceService;
-
+	//le constructeur
 	public AdminService() {
 
 		this.resourceService = new ResourceService();
@@ -31,23 +30,23 @@ public class AdminService {
 	}
 
 	public void menu() throws IOException {
-		System.out.println("-- Menu Admin--");
-		System.out.println("1. Créer un projet");
-		System.out.println("2. Supprimer un projet");
-		System.out.println("3. Ajouter un employé");
-		System.out.println("4. Assigner un employé au projet");
-		System.out.println("5. Ajouter une discipline au projet");
-		System.out.println("6. Supprimer un employé");
-		System.out.println("7. Changer le NPE d'un employé");
-		System.out.println("8. Modifier le nom d'un utilisateur");
-		System.out.println("9. Modifier le ID"); 
-		System.out.println("10. Génerer de rapport");
+		System.out.println("\n &&&&&&&&&&&&&&&&\t -- ^^ Menu Admin ^^ --\t &&&&&&&&&&&&&&&&\n");
+		System.out.println("\t1. Créer un projet");
+		System.out.println("\t2. Supprimer un projet");
+		System.out.println("\t3. Ajouter un employé");
+		System.out.println("\t4. Assigner un employé au projet");
+		System.out.println("\t5. Ajouter une discipline au projet");
+		System.out.println("\t6. Supprimer un employé");
+		System.out.println("\t7. Changer le NPE d'un employé");
+		System.out.println("\t8. Modifier le nom d'un utilisateur");
+		System.out.println("\t9. Modifier le ID"); 
+		System.out.println("\t10. Génerer de rapport");
 		System.out.println();
 
 		try {
 
 			int nbrChosi = Integer
-					.parseInt(recupererLesEntree("Veuillez appuyer sur le numéro qui correspond au menu."));
+					.parseInt(recupererLesEntree("Veuillez appuyer sur le numéro qui correspond au menu. \n\t\t"));
 
 			switch (nbrChosi) {
 
@@ -314,7 +313,7 @@ public class AdminService {
 	 * 
 	*/
 	private static String recupererLesEntree(String message) {
-		System.out.println(message);
+		System.out.print(message + " ");
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		String returnString = "";
 		try {
@@ -537,6 +536,4 @@ public class AdminService {
 	            return false;
 	        }
 	    }
-	 
-
 }
