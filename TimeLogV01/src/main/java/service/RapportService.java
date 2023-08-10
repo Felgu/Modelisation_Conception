@@ -29,6 +29,7 @@ public class RapportService {
 
 		System.out.println("1. Rapport d'état d'un projet");
 		System.out.println("2. Rapport d'état global");
+		System.out.println("3. Rapport de salaire d'un employé");
 		System.out.println();
 
 		try {
@@ -44,6 +45,10 @@ public class RapportService {
 			case 2:
 				rapportGlobalProjet();
 				break;	
+				
+			case 3:
+				rapportSalaire();
+				break;
 
 			default:
 				System.out.println("Veuillez entrer un nombre indiqué au menu\n");
@@ -141,7 +146,17 @@ public class RapportService {
 			return true;
 		}
 		
-	
+	//Q3
+		
+	private void rapportSalaire() {
+		
+		try {
+			int idEmploye = Integer.parseInt(recupererLesEntree("\n\nEntrer l'id employé"));
+			//string idEmploye = Integer.parseInt(recupererLesEntree("\n\nEntrer l'id employé"));
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
 		
 	private double totalBudgeteProjet(int idProjet) throws IOException {
 	
