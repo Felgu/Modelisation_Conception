@@ -20,11 +20,12 @@ public class Employe extends Utilisateur {
 	
 	private static int lastEmployeId = 0;
 
-	public Employe(String nom) {
+	public Employe(String nom,int idTauxHoraire) {
 		super(nom);
 		this.dateEmbauche = formatDate();
 		this.id = ++lastEmployeId;
 		this.nomUtilisateur = nom+this.id;
+		this.idTauxHoraire = idTauxHoraire;
 	}
 		
 
