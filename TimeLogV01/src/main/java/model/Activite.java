@@ -20,6 +20,17 @@ public class Activite {
 		this.heureDebut = heureDebut;
 		this.heureFin = heureFin;
 	}
+	
+	
+	public Activite(int idEmploye, int idDetailProjet, String dateDebut, String heureDebut) {
+		super();
+		this.idEmploye = idEmploye;
+		this.idDetailProjet = idDetailProjet;
+		this.dateDebut = dateDebut;
+		this.heureDebut = heureDebut;
+	}
+
+
 	public Activite() {
 		super();
 		// TODO Auto-generated constructor stub
