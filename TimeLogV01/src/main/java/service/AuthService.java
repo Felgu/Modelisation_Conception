@@ -29,9 +29,9 @@ public class AuthService extends ResourceService {
 	private void connectionEmploye() throws IOException {
 
 		System.out.println("-- Connexion Employe --\n");
-		
-		String nomUsage = recupererLesEntree("Entrée votre nom d'usager");
+				
 		String id = recupererLesEntree("Entrée votre id");
+		String nomUsage = recupererLesEntree("Entrée votre nom d'usager");
 
 		this.employeAuth(nomUsage, Integer.parseInt(id));
 	}

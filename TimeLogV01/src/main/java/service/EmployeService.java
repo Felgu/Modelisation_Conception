@@ -6,8 +6,11 @@ import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import _TimeLogV01.Main;
 import model.Activite;
@@ -18,7 +21,7 @@ import model.Projet;
 
 public class EmployeService extends ResourceService {
 
-	private int idEmploye;
+	private int idEmploye; 
 
 	public EmployeService(int idEmploye) {
 		this.idEmploye = idEmploye;
@@ -32,39 +35,11 @@ public class EmployeService extends ResourceService {
 
 	void menuPrincipaleEmploye() throws IOException {
 		System.out.println("\n-- Menu employé --\n");
-		System.out.println("1. Commencer une activité");
-		System.out.println("2. Consulter mes heures travaillées");
-		System.out.println("0. Se deconnecter");
-
-		try {
-
-			int nbrChosi = Integer
-					.parseInt(recupererLesEntree("Veuillez appuyer sur le numéro qui correspond au menu."));
-
-			switch (nbrChosi) {
-			case 1:
-				this.commencerActivite(true);
-				break;
-
-			default:
-				System.out.println("Veuillez entrer un nombre indiqué au menu\n");
-				break;
-
-			}
-
-		} catch (NumberFormatException e) {
-			System.out.println("Veuillez entrer un nombre indiqué au menu\n");
-			menuPrincipaleEmploye();
-		}
+		verifiePourCommencer();
 	}
 
-	private boolean commencerActivite(boolean estDeconnecter) throws IOException {
+	private boolean commencerActivite() throws IOException { 
 		
-		if (estDeconnecter) {
-			this.menuActiviteEncours(true);
-			return false;
-		}
-
 		List<Projet> projets = (List<Projet>) this.lireLesDonnees("projets", Projet.class);
 		List<Discipline> disciplines = (List<Discipline>) this.lireLesDonnees("disciplines", Discipline.class);
 
@@ -89,7 +64,7 @@ public class EmployeService extends ResourceService {
 			System.out.println("Veuillez entrer l'ID comme affiché");
 
 			if (recupererLesEntree("Appuyer sur entrer pour rependre") != null) {
-				commencerActivite(false);
+				commencerActivite();
 				return false;
 			}
 		}
@@ -105,7 +80,7 @@ public class EmployeService extends ResourceService {
 			System.out.println("Veuillez entrer l'ID de disciple comme affiché");
 
 			if (recupererLesEntree("Appuyer sur entrer pour rependre") != null) {
-				commencerActivite(false);
+				commencerActivite();
 				return false;
 			}
 		}
@@ -122,59 +97,105 @@ public class EmployeService extends ResourceService {
 		this.modifierDonnee("activites", activites);
 
 		System.out.println("** L'activité a débuté à " + LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")) + "... **");
-		this.menuActiviteEncours(false);
+		this.sortirActivite();
 		
 		return true;
 	}
-
-	private boolean menuActiviteEncours(boolean estDeconnecter) throws IOException {
+	
+	private boolean verifiePourCommencer() throws IOException {
 		
-		List<Activite> activites = (List<Activite>) this.lireLesDonnees("activites", Activite.class);
-		
+		List<Activite> activites = (List<Activite>) this.lireLesDonnees("activites", Activite.class);		
 		Activite activite = activites.stream().filter(activite_ ->activite_.getHeureFin() == null).findFirst().isPresent() ? activites.stream().filter(activite_ ->activite_.getHeureFin() == null).findFirst().get() : null;
 		
 		if (activite == null) {
-			this.commencerActivite(false);
-			return false;
+			this.menuActivite();
+			return true;
 		}
-		
-		if (activite != null && estDeconnecter) {
-			System.out.println("\n1. Finir l'activité commencé à " +activite.getHeureDebut());
-			System.out.println("2. Consulter mes heures travaillées");
-		} else {
-			System.out.println("1. Consulter mes heures travaillées");
-		}
+		menuActiviteEncours(activite);
+		return true;
+	}
+
+	private void finirActivite(Activite activite) throws IOException {
+		List<Activite> activites = (List<Activite>) this.lireLesDonnees("activites", Activite.class);
+
+		for (Activite activite2 : activites) {
+			if (activite2.getIdDetailProjet() == activite.getIdDetailProjet() && activite2.getIdEmploye() == activite.getIdEmploye()) {
+				activites.set(activites.indexOf(activite2), activite);
+				
+				this.modifierDonnee("activites", activites);
+			}
+			
+		}	
+	}
+	
+	
+	private boolean sortirActivite () throws IOException {		
+		  
+		System.out.println("1. Consulter mes heures travaillées");		 
 		System.out.println("0. Se deconnecter");
+	
+	int choix = Integer.parseInt(recupererLesEntree("Veuillez chosir une option"));
+	
+	try {			 
+			switch (choix) {
+			case 1:	System.out.println("Activité fini ");  
+			case 0:	new Main().menuInitiation(); ;break;
+			default: System.out.println("Entre les obtions proposées"); 
+			} 
+		
+	} catch (NumberFormatException e) {
+		System.out.println("Veuillez faire le choix affiche"); }
+	 
+	return true; 
+}
+
+	
+	private boolean menuActiviteEncours(Activite activite_) throws IOException {		
+		 
+		 
+			System.out.println("1. Finir l'activité commencé à " +activite_.getHeureDebut());
+			System.out.println("2. Consulter mes heures travaillées");		 
+			System.out.println("0. Se deconnecter");
 		
 		int choix = Integer.parseInt(recupererLesEntree("Veuillez chosir une option"));
 		
-		try {
-			
-			if (!estDeconnecter) {
+		try {			 
 				switch (choix) {
-				case 1:	System.out.println("TETS ");break;
+				case 1:	System.out.println("Activité fini "); 
+				activite_.setHeureFin(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm") ));
+				this.finirActivite(activite_); 
+				verifiePourCommencer();
+				break;
 				case 0:	new Main().menuInitiation(); ;break;
-				default: System.out.println("Entre les obtions proposées"); menuActiviteEncours(estDeconnecter);
-				}
-			}else {
-				switch (choix) {
-				case 1:	System.out.println("TETS "); break;
-				case 0:	new Main().menuInitiation(); ;break;
-				default: System.out.println("Entre les obtions proposées"); menuActiviteEncours(estDeconnecter);
-				}
-			}
+				default: System.out.println("Entre les obtions proposées"); 
+				} 
 			
 		} catch (NumberFormatException e) {
-			// TODO: handle exception
-		}
-		
-		if (choix != 0) {
-			
-		}
-		System.out.println("Veuillez entre une valeur au menu");
-		menuActiviteEncours(estDeconnecter);
-		return true;
+			System.out.println("Veuillez faire le choix affiche"); }
+		 
+		return true; 
 	}
+	
+	private boolean menuActivite() throws IOException {		 
+		
+		System.out.println("1. Commencer une activité");		 
+		System.out.println("2. Consulter mes heures travaillées");		 
+		System.out.println("0. Se deconnecter");
+	
+	int choix = Integer.parseInt(recupererLesEntree("Veuillez chosir une option"));
+	
+	try {			 
+			switch (choix) {
+			case 1:	this.commencerActivite();break;
+			case 0:	new Main().menuInitiation(); ;break;
+			default: System.out.println("Entre les obtions proposées");
+			} 
+		
+	} catch (NumberFormatException e) {
+		System.out.println("Veuillez faire le choix affiche"); }
+	 
+	return true; 
+}
 
 	/**
 	 * 
