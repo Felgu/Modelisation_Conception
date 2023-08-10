@@ -167,7 +167,7 @@ public class EmployeService extends ResourceService {
 				verifiePourCommencer();
 				break;
 				case 0:	new Main().menuInitiation(); ;break;
-				default: System.out.println("Entre les obtions proposées"); 
+				default: System.out.println("Entre les obtions proposées"); verifiePourCommencer();
 				} 
 			
 		} catch (NumberFormatException e) {
@@ -212,4 +212,12 @@ public class EmployeService extends ResourceService {
 		return returnString;
 	}
 
+	private void consulterhoraire() throws IOException {
+		
+		List<Activite> activites = (List<Activite>) this.lireLesDonnees("activites", Activite.class);
+		
+		//activites.stream().filter(activite -> activite.getIdEmploye() == this.idEmploye).
+		
+
+	}
 }

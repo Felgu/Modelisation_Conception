@@ -42,6 +42,7 @@ public class AdminService {
 		System.out.println("8. Modifier le nom d'un utilisateur");
 		System.out.println("9. Modifier le ID"); 
 		System.out.println("10. Génerer de rapport");
+		System.out.println("0. Deconnecter");
 		System.out.println();
 
 		try {
