@@ -270,7 +270,7 @@ public class EmployeService extends ResourceService {
 		System.out.println("** Consulter mes heures ** ");
 		
 		System.out.println("\nNombre de projet assigné : " + employeProjets.size());
-		System.out.println("Total heures travaillé : " + heureTravailleDeBase);
+		System.out.println("Total heures travaillé : " + heureTravailleDeBase +"\n");
 
 		verifiePourCommencer();
 
