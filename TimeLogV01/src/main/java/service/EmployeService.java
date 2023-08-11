@@ -3,6 +3,7 @@ package service;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -18,10 +19,11 @@ import model.DetailProjetDiscipline;
 import model.Discipline;
 import model.EmployeProjet;
 import model.Projet;
+import model.TauxHoraire;
 
 public class EmployeService extends ResourceService {
 
-	private int idEmploye; 
+	private int idEmploye;
 
 	public EmployeService(int idEmploye) {
 		this.idEmploye = idEmploye;
@@ -38,8 +40,8 @@ public class EmployeService extends ResourceService {
 		verifiePourCommencer();
 	}
 
-	private boolean commencerActivite() throws IOException { 
-		
+	private boolean commencerActivite() throws IOException {
+
 		List<Projet> projets = (List<Projet>) this.lireLesDonnees("projets", Projet.class);
 		List<Discipline> disciplines = (List<Discipline>) this.lireLesDonnees("disciplines", Discipline.class);
 
@@ -69,7 +71,8 @@ public class EmployeService extends ResourceService {
 			}
 		}
 
-		disciplines.forEach(disciplines_ -> System.out.println(disciplines_.getIdDiscipline() + " " + disciplines_.getNom()));
+		disciplines.forEach(
+				disciplines_ -> System.out.println(disciplines_.getIdDiscipline() + " " + disciplines_.getNom()));
 
 		int choixDiscipline = Integer.parseInt(recupererLesEntree("Veuillez chosir une discipline"));
 
@@ -86,8 +89,9 @@ public class EmployeService extends ResourceService {
 		}
 
 		List<Activite> activites = (List<Activite>) this.lireLesDonnees("activites", Activite.class);
-		List<DetailProjetDiscipline> detailProjetDisciplines = (List<DetailProjetDiscipline>) this.lireLesDonnees("detailProjetDisciplines", DetailProjetDiscipline.class);
-		
+		List<DetailProjetDiscipline> detailProjetDisciplines = (List<DetailProjetDiscipline>) this
+				.lireLesDonnees("detailProjetDisciplines", DetailProjetDiscipline.class);
+
 		int idDetailProjet = detailProjetDisciplines.stream()
 				.filter(detail -> detail.getIdProjet() == choixProjet && detail.getIdDiscpline() == choixDiscipline)
 				.findFirst().get().getIdDetailProjetDiscipline();
@@ -96,17 +100,20 @@ public class EmployeService extends ResourceService {
 				LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm"))));
 		this.modifierDonnee("activites", activites);
 
-		System.out.println("** L'activité a débuté à " + LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")) + "... **");
+		System.out.println(
+				"** L'activité a débuté à " + LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")) + "... **");
 		this.sortirActivite();
-		
+
 		return true;
 	}
-	
+
 	private boolean verifiePourCommencer() throws IOException {
-		
-		List<Activite> activites = (List<Activite>) this.lireLesDonnees("activites", Activite.class);		
-		Activite activite = activites.stream().filter(activite_ ->activite_.getHeureFin() == null).findFirst().isPresent() ? activites.stream().filter(activite_ ->activite_.getHeureFin() == null).findFirst().get() : null;
-		
+
+		List<Activite> activites = (List<Activite>) this.lireLesDonnees("activites", Activite.class);
+		Activite activite = activites.stream().filter(activite_ -> activite_.getHeureFin() == null).findFirst()
+				.isPresent() ? activites.stream().filter(activite_ -> activite_.getHeureFin() == null).findFirst().get()
+						: null;
+
 		if (activite == null) {
 			this.menuActivite();
 			return true;
@@ -119,83 +126,111 @@ public class EmployeService extends ResourceService {
 		List<Activite> activites = (List<Activite>) this.lireLesDonnees("activites", Activite.class);
 
 		for (Activite activite2 : activites) {
-			if (activite2.getIdDetailProjet() == activite.getIdDetailProjet() && activite2.getIdEmploye() == activite.getIdEmploye()) {
+			if (activite2.getIdDetailProjet() == activite.getIdDetailProjet()
+					&& activite2.getIdEmploye() == activite.getIdEmploye()) {
 				activites.set(activites.indexOf(activite2), activite);
-				
+
 				this.modifierDonnee("activites", activites);
 			}
-			
-		}	
-	}
-	
-	
-	private boolean sortirActivite () throws IOException {		
-		  
-		System.out.println("1. Consulter mes heures travaillées");		 
-		System.out.println("0. Se deconnecter");
-	
-	int choix = Integer.parseInt(recupererLesEntree("Veuillez chosir une option"));
-	
-	try {			 
-			switch (choix) {
-			case 1:	System.out.println("Activité fini ");  
-			case 0:	new Main().menuInitiation(); ;break;
-			default: System.out.println("Entre les obtions proposées"); 
-			} 
-		
-	} catch (NumberFormatException e) {
-		System.out.println("Veuillez faire le choix affiche"); }
-	 
-	return true; 
-}
 
-	
-	private boolean menuActiviteEncours(Activite activite_) throws IOException {		
-		 
-		 
-			System.out.println("1. Finir l'activité commencé à " +activite_.getHeureDebut());
-			System.out.println("2. Consulter mes heures travaillées");		 
-			System.out.println("0. Se deconnecter");
-		
+		}
+	}
+
+	// Quand l"employe se pas encore deconnecter
+	private boolean sortirActivite() throws IOException {
+
+		System.out.println("1. Consulter mes heures travaillées");
+		System.out.println("0. Se deconnecter");
+
 		int choix = Integer.parseInt(recupererLesEntree("Veuillez chosir une option"));
-		
-		try {			 
-				switch (choix) {
-				case 1:	System.out.println("Activité fini "); 
-				activite_.setHeureFin(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm") ));
-				this.finirActivite(activite_); 
+
+		try {
+			switch (choix) {
+			case 1:
+				this.consulterhoraire();
+				break;
+			case 0:
+				new Main().menuInitiation();
+				;
+				break;
+			default:
+				System.out.println("Entre les obtions proposées");
+			}
+
+		} catch (NumberFormatException e) {
+			System.out.println("Veuillez faire le choix affiche");
+		}
+
+		return true;
+	}
+
+	// menu quand l'empoye se reconnecte et eque il ya une activité encours
+	private boolean menuActiviteEncours(Activite activite_) throws IOException {
+
+		System.out.println("1. Finir l'activité commencé à " + activite_.getHeureDebut());
+		System.out.println("2. Consulter mes heures travaillées");
+		System.out.println("0. Se deconnecter");
+
+		int choix = Integer.parseInt(recupererLesEntree("Veuillez chosir une option"));
+
+		try {
+			switch (choix) {
+			case 1:
+				System.out.println("Activité fini ");
+				activite_.setHeureFin(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")));
+				this.finirActivite(activite_);
 				verifiePourCommencer();
 				break;
-				case 0:	new Main().menuInitiation(); ;break;
-				default: System.out.println("Entre les obtions proposées"); verifiePourCommencer();
-				} 
-			
+			case 2:
+				this.consulterhoraire();
+				break;
+			case 0:
+				new Main().menuInitiation();
+				;
+				break;
+			default:
+				System.out.println("Entre les obtions proposées");
+				verifiePourCommencer();
+			}
+
 		} catch (NumberFormatException e) {
-			System.out.println("Veuillez faire le choix affiche"); }
-		 
-		return true; 
+			System.out.println("Veuillez faire le choix affiche");
+		}
+
+		return true;
 	}
-	
-	private boolean menuActivite() throws IOException {		 
-		
-		System.out.println("1. Commencer une activité");		 
-		System.out.println("2. Consulter mes heures travaillées");		 
+
+	// menu de base si aucune activite est encours
+	private boolean menuActivite() throws IOException {
+
+		System.out.println("1. Commencer une activité");
+		System.out.println("2. Consulter mes heures travaillées");
 		System.out.println("0. Se deconnecter");
-	
-	int choix = Integer.parseInt(recupererLesEntree("Veuillez chosir une option"));
-	
-	try {			 
+
+		int choix = Integer.parseInt(recupererLesEntree("Veuillez chosir une option"));
+
+		try {
 			switch (choix) {
-			case 1:	this.commencerActivite();break;
-			case 0:	new Main().menuInitiation(); ;break;
-			default: System.out.println("Entre les obtions proposées");
-			} 
-		
-	} catch (NumberFormatException e) {
-		System.out.println("Veuillez faire le choix affiche"); }
-	 
-	return true; 
-}
+			case 1:
+				this.commencerActivite();
+				break;
+			case 2:
+				this.consulterhoraire();
+				break;
+			case 0:
+				new Main().menuInitiation();
+				;
+				break;
+			default:
+				System.out.println("Entre les obtions proposées");
+			}
+
+		} catch (NumberFormatException e) {
+			System.out.println("Veuillez faire le choix affiche");
+		}
+
+		return true;
+	}
 
 	/**
 	 * 
@@ -212,12 +247,38 @@ public class EmployeService extends ResourceService {
 		return returnString;
 	}
 
-	private void consulterhoraire() throws IOException {
-		
-		List<Activite> activites = (List<Activite>) this.lireLesDonnees("activites", Activite.class);
-		
-		//activites.stream().filter(activite -> activite.getIdEmploye() == this.idEmploye).
-		
+	// Q15 Nombre d'heure travailler employe
+	public boolean consulterhoraire() throws IOException {
 
+		List<Activite> activites = (List<Activite>) this.lireLesDonnees("activites", Activite.class); 
+		List<EmployeProjet> employeProjets = (List<EmployeProjet>) this.lireLesDonnees("employeProjets",	EmployeProjet.class);
+
+		double heureTravailleDeBase = 0.0;
+
+		activites = activites.stream().filter(activite -> activite.getIdEmploye() == this.idEmploye)
+				.collect(Collectors.toList()); // recuperer les heures de l'employe connecté
+		
+		employeProjets = employeProjets.stream().filter(employeProjet -> employeProjet.getIdEmploye() == this.idEmploye)
+				.collect(Collectors.toList()); // recuperer les projets assignés à l'employes
+ 
+		Duration totalDureeTravaille = activites.stream().filter(activite-> activite.getHeureFin() != null).map(activite -> Duration
+				.between(LocalTime.parse(activite.getHeureDebut()), LocalTime.parse(activite.getHeureFin())))
+				.reduce(Duration.ZERO, Duration::plus);
+
+		heureTravailleDeBase = totalDureeTravaille.toHours() + totalDureeTravaille.toMinutesPart() / 60.0;
+		
+		System.out.println("** Consulter mes heures ** ");
+		
+		System.out.println("\nNombre de projet assigné : " + employeProjets.size());
+		System.out.println("Total heures travaillé : " + heureTravailleDeBase);
+
+		verifiePourCommencer();
+
+		return true;
+	}
+
+	private String recupererNomProjet(int idProjet) throws IOException {
+		List<Projet> projets = (List<Projet>) this.lireLesDonnees("projets", Projet.class);
+		return projets.stream().filter(projet -> projet.getIdProjet() == idProjet).findFirst().get().getNomProjet();
 	}
 }
