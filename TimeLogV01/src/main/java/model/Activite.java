@@ -2,7 +2,7 @@ package model;
  
 
 public class Activite {
-	
+	//les attributs
 	private int idActivite;
 	private int idEmploye;
 	private int idDetailProjet; // fait reference à la classe detail projet
@@ -11,7 +11,7 @@ public class Activite {
 	private String heureFin;
 	
 	
-	
+	//le constructeur
 	public Activite(int idEmploye, int idDetailProjet, String dateDebut, String heureDebut, String heureFin) {
 		super();
 		this.idEmploye = idEmploye;
@@ -35,6 +35,8 @@ public class Activite {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
+	//les getters et setters
 	public int getIdActivite() {
 		return idActivite;
 	}
@@ -71,8 +73,4 @@ public class Activite {
 	public void setHeureFin(String heureFin) {
 		this.heureFin = heureFin;
 	} 
-	
-	
-	
-
 }

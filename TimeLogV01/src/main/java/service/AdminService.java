@@ -1,5 +1,4 @@
 package service;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -15,9 +14,9 @@ import model.EmployeProjet;
 import model.Projet;
 
 public class AdminService {
-
+	//les attributs
 	private ResourceService resourceService;
-
+	//le constructeur
 	public AdminService() {
 
 		this.resourceService = new ResourceService();
@@ -48,7 +47,7 @@ public class AdminService {
 		try {
 
 			int nbrChosi = Integer
-					.parseInt(recupererLesEntree("Veuillez appuyer sur le numéro qui correspond au menu."));
+					.parseInt(recupererLesEntree("Veuillez appuyer sur le numéro qui correspond au menu. \n\t\t"));
 
 			switch (nbrChosi) {
 
@@ -315,7 +314,7 @@ public class AdminService {
 	 * 
 	*/
 	private static String recupererLesEntree(String message) {
-		System.out.println(message);
+		System.out.print(message + " ");
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		String returnString = "";
 		try {
@@ -538,6 +537,4 @@ public class AdminService {
 	            return false;
 	        }
 	    }
-	 
-
 }

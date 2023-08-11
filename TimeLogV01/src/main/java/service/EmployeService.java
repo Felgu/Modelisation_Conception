@@ -31,7 +31,7 @@ public class EmployeService extends ResourceService {
 
 	// Menu pour la première fois avec le nom
 	public void menuEmploye(String name) throws IOException {
-		System.out.println("** Bienvenue " + name + " sur TimeLog **");
+		System.out.println("----------- \t** Bienvenue " + name + " sur TimeLog **\t ----------");
 		this.menuPrincipaleEmploye();
 	}
 
@@ -56,14 +56,14 @@ public class EmployeService extends ResourceService {
 				.collect(Collectors.toList());
 
 		// Boucle pour lister les projets
-		projets.forEach(projets_ -> System.out.println(projets_.getIdProjet() + " " + projets_.getNomProjet()));
+		projets.forEach(projets_ -> System.out.println("\t"+projets_.getIdProjet() + " " + projets_.getNomProjet()));
 
-		int choixProjet = Integer.parseInt(recupererLesEntree("Veuillez chosir un projet"));
+		int choixProjet = Integer.parseInt(recupererLesEntree("Veuillez chosir un projet: "));
 
 		// verifier si le projet choisi existe
 		if (!projets.stream().filter(projet -> projet.getIdProjet() == choixProjet).findFirst().isPresent()) {
 
-			System.out.println("Veuillez entrer l'ID comme affiché");
+			System.out.print("Veuillez entrer l'ID comme affiché: ");
 
 			if (recupererLesEntree("Appuyer sur entrer pour rependre") != null) {
 				commencerActivite();
@@ -74,13 +74,13 @@ public class EmployeService extends ResourceService {
 		disciplines.forEach(
 				disciplines_ -> System.out.println(disciplines_.getIdDiscipline() + " " + disciplines_.getNom()));
 
-		int choixDiscipline = Integer.parseInt(recupererLesEntree("Veuillez chosir une discipline"));
+		int choixDiscipline = Integer.parseInt(recupererLesEntree("Veuillez chosir une discipline: "));
 
 		// verifier si le projet choisi existe
 		if (!disciplines.stream().filter(disciplines_ -> disciplines_.getIdDiscipline() == choixDiscipline).findFirst()
 				.isPresent()) {
 
-			System.out.println("Veuillez entrer l'ID de disciple comme affiché");
+			System.out.print("Veuillez entrer l'ID de disciple comme affiché: ");
 
 			if (recupererLesEntree("Appuyer sur entrer pour rependre") != null) {
 				commencerActivite();
@@ -232,11 +232,8 @@ public class EmployeService extends ResourceService {
 		return true;
 	}
 
-	/**
-	 * 
-	*/
 	private static String recupererLesEntree(String message) {
-		System.out.println(message);
+		System.out.print(message + ": ");
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		String returnString = "";
 		try {

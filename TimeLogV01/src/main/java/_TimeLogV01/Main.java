@@ -1,16 +1,12 @@
 package _TimeLogV01;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
 import service.AuthService;
 import service.InitTimeLogService; 
 
 public class Main {
-
 	public static void main(String[] args) throws IOException {
-		
 		try {
 			 new InitTimeLogService();
 		} catch (IOException e) {
@@ -25,15 +21,15 @@ public class Main {
 		
 		AuthService authService = new AuthService();
 		
-	     System.out.println("Bienvenue sur TimeLog");
+	     System.out.println("\n ################### \t-- !!! Bienvenue sur TimeLog !!! -- \t ####################\n");
 	     
-	        System.out.println("1. Employe");
-	        System.out.println("2. Administrateur");	        
-	        System.out.println("0. Quitter\n");
+	        System.out.println("\t1. Employe");
+	        System.out.println("\t2. Administrateur");	        
+	        System.out.println("\t0. Quitter\n");
 	        
 	       //recuper le choix de l'utisateur
 	        try {
-	        	int nbrChosi = Integer.parseInt(inputOutput ("Veuillez appuyer sur le numéro qui correspond pour vous connectez."));
+	        	int nbrChosi = Integer.parseInt(inputOutput ("Veuillez appuyer sur le numéro qui correspond pour vous connectez: "));
 	        	
 	        	switch (nbrChosi) {
 	        	
@@ -43,7 +39,7 @@ public class Main {
 				
 				case 0 : System.out.println("Au revoir"); break;
 				
-				default: System.out.println("veuillez entrer un nombre indiqué au menu"); menuInitiation();
+				default: System.out.print("Veuillez entrer un nombre indiqué au menu: "); menuInitiation();
 				
 	        	}
 	        	 
@@ -71,6 +67,4 @@ public class Main {
 	        System.out.println("Error reading in value"); 	    }
 	    return returnString;
     }
-
 }
-

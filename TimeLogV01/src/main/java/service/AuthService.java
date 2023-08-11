@@ -28,19 +28,19 @@ public class AuthService extends ResourceService {
 
 	private void connectionEmploye() throws IOException {
 
-		System.out.println("-- Connexion Employe --\n");
-				
-		String id = recupererLesEntree("Entrée votre id");
-		String nomUsage = recupererLesEntree("Entrée votre nom d'usager");
+		System.out.println("\n@@@@@@@@@@@@@@@@\t-- !! Connexion Employe !! --\t@@@@@@@@@@@@@@@\n");
+		
+		String nomUsage = recupererLesEntree("Entrée votre nom d'usager:\t\t\t");
+		String id = recupererLesEntree("Entrée votre id: \t\t\t");
 
 		this.employeAuth(nomUsage, Integer.parseInt(id));
 	}
 
 	private void connectionAdmin() throws IOException {
 
-		System.out.println("-- Connexion Admin --");
-		String nomUsager = recupererLesEntree("Entrée votre nom d'usager");
-		String motDePasse = recupererLesEntree("Entrée votre mot de passe");
+		System.out.println("\n############## -- %%\t Connexion Admin\t%% -- ##############\n");
+		String nomUsager = recupererLesEntree("Entrée votre nom d'usager: \t\t\t");
+		String motDePasse = recupererLesEntree("Entrée votre mot de passe: \t\t\t");
 
 		this.adminAuth(nomUsager, motDePasse);
 
@@ -149,17 +149,12 @@ public class AuthService extends ResourceService {
 			}
 
 		} catch (NumberFormatException e) {
-
 			System.out.println("Veuillez entrer un nombre indiqué au menu");
 			new Main().main(null);
 		}
-
 		return true;
 	}
 
-	/**
-	 * 
-	*/
 	private static String recupererLesEntree(String message) {
 		System.out.println(message);
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -171,5 +166,4 @@ public class AuthService extends ResourceService {
 		}
 		return returnString;
 	}
-
 }
